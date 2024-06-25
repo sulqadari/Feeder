@@ -9,6 +9,7 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/usart.h>
 #include <libopencm3/cm3/nvic.h>
+#include <libopencm3/stm32/timer.h>
 
 extern QueueHandle_t queue_TX1, queue_RX1, queue_TX2, queue_RX2;
 
