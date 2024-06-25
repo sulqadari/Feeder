@@ -1,5 +1,11 @@
 {
 	"files.associations": {
-		"nvic.h": "c"
+		"*.fn": "java",
+		"00_Preface": "markdown",
+		"*.tivm": "javascript",
+		"nvic.h": "c",
+		"freertos.h": "c",
+		"task.h": "c",
+		"mcu_config.h": "c"
 	}
 }

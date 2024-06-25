@@ -1,6 +1,6 @@
 #include "mcu_config.h"
 
-QueueHandle_t queue_TX1, queue_RX1, queue_TX2, queue_RX2;
+QueueHandle_t queue_TX2, queue_RX2;
 
 static void
 init_LED(void)
@@ -29,17 +29,6 @@ init_ATcomamnds(void)
 }
 
 static void
-timer_setup(void)
-{
-	rcc_periph_clock_enable(RCC_TIM2);
-	rcc_periph_reset_pulse(RST_TIM2);
-	timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT_MUL_4, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
-	timer_set_prescaler(TIM2, 360);	// Clock counts every 5 usec.
-	timer_one_shot_mode(TIM2);
-	timer_set_period(TIM2, 20);		// 20 * 5 usec = 100 usec.
-}
-
-static void
 init_clock(void)
 {
 	rcc_periph_clock_enable(RCC_GPIOA);
@@ -50,9 +39,6 @@ init_clock(void)
 static void
 init_uart1(void)
 {
-	queue_TX1 = xQueueCreate(64, sizeof(char));
-	queue_RX1 = xQueueCreate(64, sizeof(char));
-
 	nvic_enable_irq(NVIC_USART1_IRQ);
 
 	gpio_set_mode(
@@ -82,9 +68,6 @@ init_uart1(void)
 static void
 init_uart2(void)
 {
-	queue_TX2 = xQueueCreate(64, sizeof(char));
-	queue_RX2 = xQueueCreate(64, sizeof(char));
-
 	nvic_enable_irq(NVIC_USART2_IRQ);
 
 	gpio_set_mode(
@@ -114,6 +97,9 @@ init_uart2(void)
 void
 feeder_init(void)
 {
+	queue_TX2 = xQueueCreate(64, sizeof(char));
+	queue_RX2 = xQueueCreate(64, sizeof(char));
+
 	rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
 
 	init_clock();
@@ -121,37 +107,4 @@ feeder_init(void)
 	init_ATcomamnds();
 	init_uart1();
 	init_uart2();
-	timer_setup();
-}
-
-void
-USART1_IRQHandler(void)
-{
-	char ch;
-	BaseType_t hpTask = pdFALSE;
-
-	while (((USART_SR(USART1) & USART_SR_RXNE) != 0)) {
-		ch = usart_recv(USART1);
-
-		xQueueSendToBackFromISR(queue_RX1, &ch, &hpTask);
-	}
-}
-
-void
-USART2_IRQHandler(void)
-{
-	char ch;
-	BaseType_t hpTask = pdFALSE;
-
-	while (((USART_SR(USART2) & USART_SR_RXNE) != 0)) {
-		ch = usart_recv(USART2);
-
-		xQueueSendToBackFromISR(queue_RX2, &ch, &hpTask);
-	}
-}
-
-void
-TIM2_IRQHandler(void)
-{
-	return;
 }

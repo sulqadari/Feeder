@@ -1,13 +1,13 @@
 add_executable(${PROJECT_NAME}.elf
 	main.c
 	mcu_config.c
+	communication.c
 	startup_stm32f103xb.s
 	${rtos_sources}/tasks.c
 	${rtos_sources}/list.c
 	${rtos_sources}/portable/MemMang/heap_4.c
 	${rtos_sources}/queue.c
 	${rtos_portable}/port.c
-	${hal_src_stm32_cmn}/timer_common_all.c
 	${hal_src_stm32_cmn}/usart_common_all.c
 	${hal_src_stm32_cmn}/usart_common_f124.c
 	${hal_src_stm32_cmn}/rcc_common_all.c
