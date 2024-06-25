@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/includes",
+                "${workspaceFolder}/libopencm3/include",
+                "${workspaceFolder}/FreeRTOS-Kernel/include",
+                "${workspaceFolder}/FreeRTOS-Kernel/portable/GCC/ARM_CM3",
+                "${workspaceFolder}/libopencm3/include/libopencm3/stm32",
+				"${workspaceFolder}/libopencm3/include/libopencm3/stm32/f1"
+            ],
+            "defines": [
+                "STM32F1"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

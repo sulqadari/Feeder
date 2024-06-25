@@ -1,0 +1,24 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Feeder",
+			"type": "cortex-debug",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"servertype": "openocd",
+			"executable": "./build/src/Feeder.elf",
+			"svdFile": "STM32F103.svd",
+			"configFiles": [
+				"interface/stlink-v2.cfg",
+				"board/stm32f103c8_blue_pill.cfg"
+			],
+			"runToEntryPoint": "main",
+			"armToolchainPath": "/usr/bin",
+			"gdbPath": "/usr/bin/gdb-multiarch",
+		}
+	]
+}
