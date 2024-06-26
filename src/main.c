@@ -1,5 +1,8 @@
 #include "mcu_config.h"
 
+/**
+ * Copies a character from input buffer to the output buffer.
+ */
 static void
 task_bluetoothInput(void* args __attribute__((unused)))
 {
@@ -9,13 +12,18 @@ task_bluetoothInput(void* args __attribute__((unused)))
 	}
 }
 
+/**
+ * Outputs a data received from the BT to the console.
+ * This function blocks until queue has another portion of data
+ * to be sent.
+ */
 static void
 task_consoleOuput(void* args __attribute__((unused)))
 {
 	char ch;
 
 	for (;;) {
-		while (xQueueReceive(queue_TX2, &ch, portMAX_DELAY) != pdPASS)
+		while (xQueueReceive(queue_TX2, &ch, portMAX_DELAY) == pdFAIL)
 			taskYIELD();
 		
 		while (!usart_get_flag(USART1, USART_SR_TXE))

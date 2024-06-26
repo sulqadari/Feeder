@@ -37,7 +37,7 @@ init_clock(void)
 }
 
 static void
-init_uart1(void)
+init_uart1_console(void)
 {
 	nvic_enable_irq(NVIC_USART1_IRQ);
 
@@ -66,7 +66,7 @@ init_uart1(void)
 }
 
 static void
-init_uart2(void)
+init_uart2_bt(void)
 {
 	nvic_enable_irq(NVIC_USART2_IRQ);
 
@@ -105,6 +105,6 @@ feeder_init(void)
 	init_clock();
 	init_LED();
 	init_ATcomamnds();
-	init_uart1();
-	init_uart2();
+	init_uart1_console();
+	init_uart2_bt();
 }

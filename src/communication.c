@@ -25,7 +25,7 @@ readCharacter(void)
 {
 	char ch;
 
-	while (xQueueReceive(queue_RX2, &ch, 0) != pdPASS)
+	while (xQueueReceive(queue_RX2, &ch, 0) == pdFAIL)
 		taskYIELD();
 	
 	gpio_toggle(GPIOC, GPIO13);
@@ -41,7 +41,7 @@ void
 writeCharacter(char ch)
 {
 _again:
-	while (xQueueSend(queue_TX2, &ch, 0) != pdPASS)
+	while (xQueueSendToBack(queue_TX2, &ch, 0) == pdFAIL)
 		taskYIELD();
 	
 	if (ch == '\n') {
