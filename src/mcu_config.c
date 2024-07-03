@@ -40,7 +40,7 @@ init_clock(void)
 static void
 init_uart1_console(void)
 {
-	nvic_enable_irq(NVIC_USART1_IRQ);
+	// nvic_enable_irq(NVIC_USART1_IRQ);
 
 	gpio_set_mode(
 		GPIOA,
@@ -62,7 +62,7 @@ init_uart1_console(void)
 	usart_set_mode(USART1, USART_MODE_TX_RX);
 	usart_set_parity(USART1, USART_PARITY_NONE);
 
-	usart_enable_rx_interrupt(USART1);
+	// usart_enable_rx_interrupt(USART1);
 	usart_enable(USART1);
 }
 
@@ -85,7 +85,7 @@ init_uart2_bt(void)
 		GPIO_USART2_RX
 	);
 
-	usart_set_baudrate(USART2, 115200);
+	usart_set_baudrate(USART2, 38400);
 	usart_set_databits(USART2, 8);
 	usart_set_stopbits(USART2, USART_STOPBITS_1);
 	usart_set_mode(USART2, USART_MODE_TX_RX);
