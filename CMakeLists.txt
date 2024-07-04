@@ -30,7 +30,7 @@ add_compile_definitions(
 #-mapcs-frame -msoft-float
 # -fno-hosted -fno-builtin
 add_compile_options(
-	-Wall -O0 -std=gnu17
+	-Wall -O0 -std=gnu17 -g
 	-mcpu=cortex-m3
 	# -mthumb
 	# -mtune=cortex-m3 

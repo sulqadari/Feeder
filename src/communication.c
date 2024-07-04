@@ -18,6 +18,8 @@ USART2_IRQHandler(void)
 
 		xQueueSendToBackFromISR(queue_RX2, &ch, &hpTask);
 	}
+
+	gpio_toggle(GPIOC, GPIO13);
 }
 
 char
@@ -27,8 +29,7 @@ readCharacter(void)
 
 	while (xQueueReceive(queue_RX2, &ch, 0) == pdFAIL)
 		taskYIELD();
-	
-	gpio_toggle(GPIOC, GPIO13);
+
 	return ch;
 }
 
@@ -51,7 +52,7 @@ _again:
 }
 
 void
-sendString(char* str)
+writeString(char* str)
 {
 	while (*str != '\0')
 		writeCharacter(*str++);

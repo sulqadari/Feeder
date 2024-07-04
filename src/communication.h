@@ -5,5 +5,6 @@
 
 void writeCharacter(char ch);
 char readCharacter(void);
+void writeString(char* str);
 
 #endif // !FREEDER_CONNECTIONS_H

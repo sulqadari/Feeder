@@ -6,6 +6,7 @@
 		"nvic.h": "c",
 		"freertos.h": "c",
 		"task.h": "c",
-		"mcu_config.h": "c"
+		"mcu_config.h": "c",
+		"communication.h": "c"
 	}
 }

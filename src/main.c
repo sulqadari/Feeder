@@ -7,9 +7,13 @@
 static void
 task_bluetoothInput(void* args __attribute__((unused)))
 {
+	writeString("---=== Fish Feeder ===---\n");
 	for (;;) {
 		char ch = readCharacter();
 		writeCharacter(ch);
+
+		if (ch == '\r')
+			writeString("\n>> ");
 	}
 }
 
@@ -34,15 +38,6 @@ task_consoleOuput(void* args __attribute__((unused)))
 	}
 }
 
-static void
-task_blink(void* args __attribute((unused)))
-{
-	for (;;) {
-		vTaskDelay(pdMS_TO_TICKS(200));
-		gpio_toggle(GPIOC, GPIO13);
-	}
-}
-
 int
 main(void)
 {
@@ -50,7 +45,6 @@ main(void)
 
 	xTaskCreate(task_consoleOuput, "console", 50, NULL, configMAX_PRIORITIES - 1, NULL);
 	xTaskCreate(task_bluetoothInput, "bluetooth", 50, NULL, configMAX_PRIORITIES - 1, NULL);
-	xTaskCreate(task_blink, "blink", 50, NULL, configMAX_PRIORITIES - 1, NULL);
 	vTaskStartScheduler();
 	
 	for (volatile uint8_t i = 0; ; ++i) { }

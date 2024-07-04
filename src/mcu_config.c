@@ -85,7 +85,7 @@ init_uart2_bt(void)
 		GPIO_USART2_RX
 	);
 
-	usart_set_baudrate(USART2, 38400);
+	usart_set_baudrate(USART2, 9600);
 	usart_set_databits(USART2, 8);
 	usart_set_stopbits(USART2, USART_STOPBITS_1);
 	usart_set_mode(USART2, USART_MODE_TX_RX);
