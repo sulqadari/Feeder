@@ -40,8 +40,6 @@ init_clock(void)
 static void
 init_uart1_console(void)
 {
-	// nvic_enable_irq(NVIC_USART1_IRQ);
-
 	gpio_set_mode(
 		GPIOA,
 		GPIO_MODE_OUTPUT_50_MHZ,

@@ -19,6 +19,7 @@
 			"runToEntryPoint": "main",
 			"armToolchainPath": "/usr/bin",
 			"gdbPath": "/usr/bin/gdb-multiarch",
+			"showDevDebugOutput": "raw"
 		}
 	]
 }

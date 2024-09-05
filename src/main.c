@@ -12,13 +12,17 @@ task_bluetoothInput(void* args __attribute__((unused)))
 		char ch = readCharacter();
 		writeCharacter(ch);
 
-		if (ch == '\r')
+	/* TODO: the below flow control doesn't work because an application
+	 * doesn't send '\r\n' sequence. Thus there is two workarounds:
+	 * 1. padding \r\n\ when the length on queue equals 0.
+	 * 2. \r\n\ sequence shall be sent from application. */
+		if (ch == '\r' || ch == '\n' || ch == '\0')
 			writeString("\n>> ");
 	}
 }
 
 /**
- * Outputs a data received from the BT to the console.
+ * Outputs to the console a data received from the BT.
  * This function blocks until queue has another portion of data
  * to be sent.
  */
