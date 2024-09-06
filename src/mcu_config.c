@@ -96,8 +96,8 @@ init_uart2_bt(void)
 void
 feeder_init(void)
 {
-	termBuff = xQueueCreate(256, sizeof(char));
-	btoothBuff = xQueueCreate(256, sizeof(char));
+	termBuff = xQueueCreate(4, sizeof(char));
+	btoothBuff = xQueueCreate(4, sizeof(char));
 
 	rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
 
