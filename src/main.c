@@ -7,17 +7,9 @@
 static void
 task_bluetoothInput(void* args __attribute__((unused)))
 {
-	writeString("---=== Fish Feeder ===---\n");
 	for (;;) {
 		char ch = readCharacter();
 		writeCharacter(ch);
-
-	/* TODO: the below flow control doesn't work because an application
-	 * doesn't send '\r\n' sequence. Thus there is two workarounds:
-	 * 1. padding \r\n\ when the length on queue equals 0.
-	 * 2. \r\n\ sequence shall be sent from application. */
-		if (ch == '\r' || ch == '\n' || ch == '\0')
-			writeString("\n>> ");
 	}
 }
 
@@ -47,8 +39,9 @@ main(void)
 {
 	feeder_init();
 
-	xTaskCreate(task_consoleOuput, "console", 50, NULL, configMAX_PRIORITIES - 1, NULL);
-	xTaskCreate(task_bluetoothInput, "bluetooth", 50, NULL, configMAX_PRIORITIES - 1, NULL);
+	writeString("---=== Fish Feeder ===---\n");
+	xTaskCreate(task_bluetoothInput, "bluetooth", 64, NULL, configMAX_PRIORITIES - 1, NULL);
+	xTaskCreate(task_consoleOuput, "console", 64, NULL, configMAX_PRIORITIES - 1, NULL);
 	vTaskStartScheduler();
 	
 	for (volatile uint8_t i = 0; ; ++i) { }

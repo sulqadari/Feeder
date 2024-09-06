@@ -13,9 +13,8 @@ USART2_IRQHandler(void)
 	char ch;
 	BaseType_t hpTask = pdFALSE;
 
-	while (((USART_SR(USART2) & USART_SR_RXNE) != 0)) {
+	if ((USART_SR(USART2) & USART_SR_RXNE) != 0) {
 		ch = usart_recv(USART2);
-
 		xQueueSendToBackFromISR(queue_RX2, &ch, &hpTask);
 	}
 
@@ -41,13 +40,12 @@ readCharacter(void)
 void
 writeCharacter(char ch)
 {
-_again:
 	while (xQueueSendToBack(queue_TX2, &ch, 0) == pdFAIL)
 		taskYIELD();
 	
-	if (ch == '\n') {
-		ch = '\r';
-		goto _again;
+	if (ch == '\0') {
+		ch = '\n';
+		xQueueSendToBack(queue_TX2, &ch, 0);
 	}
 }
 
