@@ -3,8 +3,8 @@
 
 #include "mcu_config.h"
 
-void writeCharacter(char ch);
-char readCharacter(void);
+void sendCharToConsole(char ch);
+char getCharFromBt(void);
 void writeString(char* str);
 
 #endif // !FREEDER_CONNECTIONS_H

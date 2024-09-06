@@ -10,7 +10,7 @@
 #include <libopencm3/stm32/usart.h>
 #include <libopencm3/cm3/nvic.h>
 
-extern QueueHandle_t queue_TX2, queue_RX2;
+extern QueueHandle_t termBuff, btoothBuff;
 
 void feeder_init(void);
 

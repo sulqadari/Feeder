@@ -8,8 +8,8 @@ static void
 task_bluetoothInput(void* args __attribute__((unused)))
 {
 	for (;;) {
-		char ch = readCharacter();
-		writeCharacter(ch);
+		char ch = getCharFromBt();
+		sendCharToConsole(ch);
 	}
 }
 
@@ -24,7 +24,7 @@ task_consoleOuput(void* args __attribute__((unused)))
 	char ch;
 
 	for (;;) {
-		while (xQueueReceive(queue_TX2, &ch, portMAX_DELAY) == pdFAIL)
+		while (xQueueReceive(termBuff, &ch, portMAX_DELAY) == pdFAIL)
 			taskYIELD();
 		
 		while (!usart_get_flag(USART1, USART_SR_TXE))

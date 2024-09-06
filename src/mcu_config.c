@@ -1,6 +1,6 @@
 #include "mcu_config.h"
 
-QueueHandle_t queue_TX2, queue_RX2;
+QueueHandle_t termBuff, btoothBuff;
 
 static void
 init_LED(void)
@@ -96,8 +96,8 @@ init_uart2_bt(void)
 void
 feeder_init(void)
 {
-	queue_TX2 = xQueueCreate(256, sizeof(char));
-	queue_RX2 = xQueueCreate(256, sizeof(char));
+	termBuff = xQueueCreate(256, sizeof(char));
+	btoothBuff = xQueueCreate(256, sizeof(char));
 
 	rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
 

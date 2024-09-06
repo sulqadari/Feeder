@@ -5,7 +5,7 @@
  * When the CH-5 sends the string to STM32, an interruption
  * arises which in turn calls this function.
  * Within the while loop each successive byte is written into
- * queue_RX2 buffer.
+ * btoothBuff buffer.
  */
 void
 USART2_IRQHandler(void)
@@ -15,18 +15,20 @@ USART2_IRQHandler(void)
 
 	if ((USART_SR(USART2) & USART_SR_RXNE) != 0) {
 		ch = usart_recv(USART2);
-		xQueueSendToBackFromISR(queue_RX2, &ch, &hpTask);
+		xQueueSendToBackFromISR(btoothBuff, &ch, &hpTask);
 	}
 
 	gpio_toggle(GPIOC, GPIO13);
 }
 
 char
-readCharacter(void)
+getCharFromBt(void)
 {
 	char ch;
 
-	while (xQueueReceive(queue_RX2, &ch, 0) == pdFAIL)
+	/* Fetch a char which was stored in the buffer from the last call
+	 * of USART2_IRQHandler(). */
+	while (xQueueReceive(btoothBuff, &ch, 0) == pdFAIL)
 		taskYIELD();
 
 	return ch;
@@ -38,14 +40,14 @@ readCharacter(void)
  * to the successive task.
  */
 void
-writeCharacter(char ch)
+sendCharToConsole(char ch)
 {
-	while (xQueueSendToBack(queue_TX2, &ch, 0) == pdFAIL)
+	while (xQueueSendToBack(termBuff, &ch, 0) == pdFAIL)
 		taskYIELD();
 	
 	if (ch == '\0') {
 		ch = '\n';
-		xQueueSendToBack(queue_TX2, &ch, 0);
+		xQueueSendToBack(termBuff, &ch, 0);
 	}
 }
 
@@ -53,5 +55,5 @@ void
 writeString(char* str)
 {
 	while (*str != '\0')
-		writeCharacter(*str++);
+		sendCharToConsole(*str++);
 }
