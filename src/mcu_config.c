@@ -38,7 +38,7 @@ init_clock(void)
 }
 
 static void
-init_uart1_console(void)
+init_uart1_termOut(void)
 {
 	gpio_set_mode(
 		GPIOA,
@@ -96,14 +96,14 @@ init_uart2_bt(void)
 void
 feeder_init(void)
 {
-	termBuff = xQueueCreate(4, sizeof(char));
-	btoothBuff = xQueueCreate(4, sizeof(char));
+	termBuff = xQueueCreate(32, sizeof(char));
+	btoothBuff = xQueueCreate(32, sizeof(char));
 
 	rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
 
 	init_clock();
 	init_LED();
 	init_ATcomamnds();
-	init_uart1_console();
+	init_uart1_termOut();
 	init_uart2_bt();
 }

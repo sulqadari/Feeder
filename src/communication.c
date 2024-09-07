@@ -42,12 +42,17 @@ getCharFromBt(void)
 void
 sendCharToConsole(char ch)
 {
+_again:
 	while (xQueueSendToBack(termBuff, &ch, 0) == pdFAIL)
 		taskYIELD();
-	
-	if (ch == '\0') {
-		ch = '\n';
-		xQueueSendToBack(termBuff, &ch, 0);
+
+	switch (ch) {
+		case '\n':
+			ch = '\r';
+		goto _again;
+		case '\0':
+			ch = '\n';
+		goto _again;
 	}
 }
 

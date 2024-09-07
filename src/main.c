@@ -19,7 +19,7 @@ task_bluetoothInput(void* args __attribute__((unused)))
  * to be sent.
  */
 static void 
-task_consoleOuput(void* args __attribute__((unused)))
+task_termOutput(void* args __attribute__((unused)))
 {
 	char ch;
 
@@ -41,10 +41,10 @@ main(void)
 
 	writeString("---=== Fish Feeder ===---\n");
 	xTaskCreate(task_bluetoothInput, "bluetooth", 64, NULL, configMAX_PRIORITIES - 1, NULL);
-	xTaskCreate(task_consoleOuput, "console", 64, NULL, configMAX_PRIORITIES - 1, NULL);
+	xTaskCreate(task_termOutput, "termOut", 64, NULL, configMAX_PRIORITIES - 1, NULL);
 	vTaskStartScheduler();
 	
-	for (volatile uint8_t i = 0; ; ++i) { }
+	for (volatile uint8_t i = 0; ; ++i) {  }
 
 	return (0);
 }
