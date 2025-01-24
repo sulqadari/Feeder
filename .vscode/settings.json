@@ -1,9 +1,11 @@
 {
 	"files.associations": {
-		"*.jcsh": "shellscript",
 		"*.fn": "java",
 		"00_Preface": "markdown",
 		"*.tivm": "javascript",
+		"*.txt": "cmake",
+		"*.fv": "javascript",
+		"*.jcsh": "shellscript",
 		"nvic.h": "c",
 		"freertos.h": "c",
 		"task.h": "c",
@@ -13,6 +15,7 @@
 		"rcc.h": "c",
 		"semaphore.h": "c",
 		"semphr.h": "c",
-		"mcuio.h": "c"
+		"mcuio.h": "c",
+		"cortex.h": "c"
 	}
 }

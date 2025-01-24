@@ -1,6 +1,5 @@
 #include "FreeRTOS.h"
 #include "task.h"
-// #include "semphr.h"
 
 #include <libopencm3/cm3/cortex.h>
 #include <libopencm3/stm32/rcc.h>
@@ -8,8 +7,6 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/cm3/nvic.h>
 
-#include "mcuio.h"
-#include "miniprintf.h"
 
 
 static volatile uint32_t days = 0, hours = 0, minutes = 0, seconds = 0;
@@ -51,23 +48,15 @@ rtc_setup(void)
 {
 	rcc_enable_rtc_clock();
 	rtc_interrupt_disable(RTC_SEC);
-	// rtc_interrupt_disable(RTC_ALR);
-	// rtc_interrupt_disable(RTC_OW);
-
-	// RCC_HSE, RCC_LSE, RCC_LSI
-	rtc_awake_from_off(RCC_HSE); 
-	rtc_set_prescale_val(62500);
-	rtc_set_counter_val(0xFFFFFFF0);
+	rtc_awake_from_off(RCC_LSE); 
+	rtc_set_prescale_val(0xFFFF);
+	rtc_set_counter_val(0x0);
 
 	nvic_enable_irq(NVIC_RTC_IRQ);
 
 	cm_disable_interrupts();
 	rtc_clear_flag(RTC_SEC);
-	// rtc_clear_flag(RTC_ALR);
-	// rtc_clear_flag(RTC_OW);
 	rtc_interrupt_enable(RTC_SEC);
-	// rtc_interrupt_enable(RTC_ALR);
-	// rtc_interrupt_enable(RTC_OW);
 	cm_enable_interrupts();
 }
 
@@ -79,8 +68,6 @@ task_1(void* args __attribute__((unused)))
 	for (;;) {
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);	// Block execution until notified
 		gpio_toggle(GPIOC, GPIO13);	// Toggle LED
-		
-		std_printf("Time: %3lu days %02lu:%02lu:%02lu\n", days,hours,minutes,seconds);
 	}
 }
 
@@ -95,9 +82,6 @@ main(void)
 	xTaskCreate(task_1, "task_1", 64, NULL, configMAX_PRIORITIES - 1, &task_1_Hdlr);
 
 	gpio_clear(GPIOC, GPIO13);
-
-	usb_start(1,1);
-	std_set_device(mcu_usb);	// Use USB for std I/O
 
 	vTaskStartScheduler();
 	

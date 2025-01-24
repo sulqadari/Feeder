@@ -14,17 +14,17 @@ static const struct s_mcuio dev_uart2 =
 static const struct s_mcuio dev_uart3 =
 	{ uart3_putc, uart3_puts, uart3_vprintf, uart3_getc, uart3_peek, uart3_gets, uart3_write, uart3_getline };
 
-static const struct s_mcuio dev_usb =
-	{ usb_putc, usb_puts, usb_vprintf, usb_getc, usb_peek, usb_gets, usb_write, usb_getline };
+// static const struct s_mcuio dev_usb =
+// 	{ usb_putc, usb_puts, usb_vprintf, usb_getc, usb_peek, usb_gets, usb_write, usb_getline };
 
 const struct s_mcuio
 	*mcu_uart1 = &dev_uart1,
 	*mcu_uart2 = &dev_uart2,
 	*mcu_uart3 = &dev_uart3,
-	*mcu_usb = &dev_usb;
+	*mcu_usb = NULL;   // &dev_usb;
 
 const struct s_mcuio
-	*mcu_stdio = &dev_usb;		// By default
+	*mcu_stdio = NULL; // &dev_usb;		// By default
 
 int
 mcu_printf(const struct s_mcuio *dev,const char *format,...) {

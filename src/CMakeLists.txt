@@ -14,28 +14,15 @@ add_executable(${ENTRY_POINT}.elf
 	${hal_src_stm32_cmn}/gpio_common_all.c
 	${hal_src_stm32_cmn}/flash_common_all.c
 	${hal_src_stm32_cmn}/pwr_common_v1.c
-	utils/mcuio.c
-	utils/usbcdc.c
-	utils/miniprintf.c
-	utils/getline.c
-
-	# USB stack
-	${hal_path}/lib/usb/usb.c
-	${hal_path}/lib/usb/usb_control.c
-	${hal_path}/lib/usb/usb_standard.c
-	${hal_src_stm32}/st_usbfs_v1.c
-	${hal_src_stm32}/common/st_usbfs_core.c
+	
 )
 
 target_include_directories(${ENTRY_POINT}.elf
 	PUBLIC
 		${PROJECT_SOURCE_DIR}/includes
-		${PROJECT_SOURCE_DIR}/includes/utils
 		${rtos_sources}/include
 		${rtos_portable}
 		${hal_path}/include
-		${hal_path}/include/libopencm3/stm32/common
-		${hal_path}/include/libopencm3/stm32/f1
 )
 
 add_custom_command(TARGET ${ENTRY_POINT}.elf

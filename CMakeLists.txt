@@ -41,7 +41,6 @@ add_compile_options(
 	# -mapcs-frame
 	# -msoft-float
 	# -fno-hosted
-	# -fno-builtin
 )
 
 add_link_options(
