@@ -29,11 +29,12 @@ add_compile_definitions(
 )
 
 #-mapcs-frame -msoft-float
-# -fno-hosted -fno-builtin
+# -fno-hosted -fno-builtin -std=c99
 add_compile_options(
-	-Wall -O0 -std=gnu17 -g
+	-Wall -O0 -std=c99 -g
 	-mcpu=cortex-m3
-	# -mthumb
+	-mthumb
+	-fno-common
 	# -mtune=cortex-m3 
 	-fdata-sections -ffunction-sections
 	# -specs=nosys.specs
@@ -46,6 +47,7 @@ add_compile_options(
 add_link_options(
 	-mcpu=cortex-m3
 	-mthumb
+	# -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 	"LINKER:--gc-sections"	# used in conjunction with '-fdata-sections -ffunction-sections'
 	"LINKER:-T,${CMAKE_SOURCE_DIR}/src/STM32F103XB_FLASH.ld"
 	"LINKER:-Map=feeder.map"

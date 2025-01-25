@@ -14,7 +14,7 @@ add_executable(${ENTRY_POINT}.elf
 	${hal_src_stm32_cmn}/gpio_common_all.c
 	${hal_src_stm32_cmn}/flash_common_all.c
 	${hal_src_stm32_cmn}/pwr_common_v1.c
-	
+	${hal_src_stm32_cmn}/i2c_common_v1.c
 )
 
 target_include_directories(${ENTRY_POINT}.elf
