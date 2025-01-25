@@ -10,6 +10,7 @@ set(OBJCOPY				"arm-none-eabi-objcopy")
 set(OBJDUMP				"arm-none-eabi-objdump")
 set(SIZE				"arm-none-eabi-size")
 
+set(ENTRY_POINT "FeedMexe")
 # The paths to the libopencm3 files
 set(hal_path			${CMAKE_SOURCE_DIR}/libopencm3)
 set(hal_src_stm32		${hal_path}/lib/stm32)
@@ -40,7 +41,6 @@ add_compile_options(
 	# -mapcs-frame
 	# -msoft-float
 	# -fno-hosted
-	# -fno-builtin
 )
 
 add_link_options(
@@ -48,7 +48,7 @@ add_link_options(
 	-mthumb
 	"LINKER:--gc-sections"	# used in conjunction with '-fdata-sections -ffunction-sections'
 	"LINKER:-T,${CMAKE_SOURCE_DIR}/src/STM32F103XB_FLASH.ld"
-	"LINKER:-Map=map.log"
+	"LINKER:-Map=feeder.map"
 )
 
 

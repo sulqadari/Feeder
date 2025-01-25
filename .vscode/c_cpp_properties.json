@@ -8,7 +8,8 @@
                 "${workspaceFolder}/FreeRTOS-Kernel/include",
                 "${workspaceFolder}/FreeRTOS-Kernel/portable/GCC/ARM_CM3",
                 "${workspaceFolder}/libopencm3/include/libopencm3/stm32",
-				"${workspaceFolder}/libopencm3/include/libopencm3/stm32/f1"
+				"${workspaceFolder}/libopencm3/include/libopencm3/stm32/f1",
+				"${workspaceFolder}/includes/utils"
             ],
             "defines": [
                 "STM32F1",

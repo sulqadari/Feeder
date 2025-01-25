@@ -130,6 +130,20 @@ configKERNEL_INTERRUPT_PRIORITY setting.  Here 15 corresponds to the lowest
 NVIC value of 255. */
 #define configLIBRARY_KERNEL_INTERRUPT_PRIORITY	15
 
+/* An application can install FreeRTOS interrupt handlers in one of the
+* following ways:
+* 1. Direct Routing - Install the functions vPortSVCHandler and
+*    xPortPendSVHandler for SVCall and PendSV interrupts respectively.
+* 2. Indirect Routing - Install separate handlers for SVCall and PendSV
+*    interrupts and route program control from those handlers to
+*    vPortSVCHandler and xPortPendSVHandler functions.
+*
+* Applications that use Indirect Routing must set
+* configCHECK_HANDLER_INSTALLATION to 0 in their FreeRTOSConfig.h. Direct
+* routing, which is validated here when configCHECK_HANDLER_INSTALLATION
+* is 1, should be preferred when possible. */
+#define configCHECK_HANDLER_INSTALLATION 0
+
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */
 #define vPortSVCHandler		SVC_Handler
