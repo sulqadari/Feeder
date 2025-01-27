@@ -6,7 +6,7 @@
 #include <libopencm3/stm32/rtc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/cm3/nvic.h>
-
+#include <libopencm3/stm32/spi.h>
 
 
 static volatile uint32_t days = 0, hours = 0, minutes = 0, seconds = 0;
@@ -76,8 +76,57 @@ main(void)
 {
 	rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
 	
+	rcc_periph_clock_enable(RCC_GPIOA);
+	rcc_periph_clock_enable(RCC_GPIOB);
 	rcc_periph_clock_enable(RCC_GPIOC);
-	gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+	rcc_periph_clock_enable(RCC_AFIO);
+	rcc_periph_clock_enable(RCC_SPI1);
+
+	// LED on PC13
+	gpio_set_mode(GPIOC,
+		GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL,
+		GPIO13);
+	gpio_set(GPIOC,GPIO13);	// PC13 = on
+
+	// Put SPI1 on PB5/PB4/PB3/PA15
+	gpio_primary_remap(
+			0, // Optional
+	AFIO_MAPR_SPI1_REMAP);
+	
+	// PB10 -> D/C, PB11 -> RES
+	gpio_set_mode(GPIOB,
+		GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL,
+		GPIO10|GPIO11);
+	// Activate OLED Reset line
+	gpio_clear(GPIOB,GPIO11); 
+
+	// PB5=MOSI, PB3=SCK
+	gpio_set_mode(
+		GPIOB,
+				GPIO_MODE_OUTPUT_50_MHZ,
+			GPIO_CNF_OUTPUT_ALTFN_PUSHPULL,
+				GPIO5|GPIO3
+	);
+	// NSS=PA15
+	gpio_set_mode(
+		GPIOA,
+				GPIO_MODE_OUTPUT_50_MHZ,
+			GPIO_CNF_OUTPUT_ALTFN_PUSHPULL,
+				GPIO15
+	);
+	
+	spi_init_master(
+		SPI1,
+                SPI_CR1_BAUDRATE_FPCLK_DIV_256,
+                SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
+		SPI_CR1_CPHA_CLK_TRANSITION_1,
+	        SPI_CR1_DFF_8BIT,
+	        SPI_CR1_MSBFIRST
+	);
+	spi_disable_software_slave_management(SPI1);
+	spi_enable_ss_output(SPI1);
 
 	xTaskCreate(task_1, "task_1", 64, NULL, configMAX_PRIORITIES - 1, &task_1_Hdlr);
 
