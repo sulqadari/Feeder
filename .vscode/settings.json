@@ -16,6 +16,8 @@
 		"semaphore.h": "c",
 		"semphr.h": "c",
 		"mcuio.h": "c",
-		"cortex.h": "c"
+		"cortex.h": "c",
+		"math.h": "c",
+		"stm32f1xx.h": "c"
 	}
 }
