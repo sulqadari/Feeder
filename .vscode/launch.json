@@ -10,7 +10,7 @@
 			"request": "launch",
 			"cwd": "${workspaceFolder}",
 			"servertype": "openocd",
-			"executable": "./build/src/FeedMexe.elf",
+			"executable": "./build/src/FeedMe.elf",
 			"svdFile": "STM32F103.svd",
 			"configFiles": [
 				"interface/stlink-v2.cfg",

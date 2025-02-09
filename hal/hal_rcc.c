@@ -33,6 +33,8 @@ rcc_set_hse72(void)
 
 	RCC->CR &= ~RCC_CR_HSION;			// Turn HSI oscillator off
 	
+	SystemCoreClockUpdate();
+	
 	return 0;
 }
 

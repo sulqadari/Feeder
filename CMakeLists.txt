@@ -12,11 +12,12 @@ set(SIZE				"arm-none-eabi-size")
 
 set(ENTRY_POINT "FeedMe")
 set(LIB_HAL		"_hal")
+set(LIB_LCD1602 "_lcd1602")
 
-set(cmsis_path			${PROJECT_SOURCE_DIR}/CMSIS)
+set(cmsis_path			${PROJECT_SOURCE_DIR}/hal/CMSIS)
 set(cmsis_inc_device	${cmsis_path}/Device/ST/STM32F1xx/Include)
 set(cmsis_inc_core		${cmsis_path}/Include)
-
+set(cmsis_src_templates ${cmsis_path}/Device/ST/STM32F1xx/Source/Templates)
 
 add_compile_definitions(
 	STM32F103xB STM32F1
@@ -42,3 +43,4 @@ add_link_options(
 
 add_subdirectory(src)
 add_subdirectory(hal)
+add_subdirectory(libs/LCD1602)

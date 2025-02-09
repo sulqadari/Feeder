@@ -3,10 +3,12 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/CMSIS",
-                "${workspaceFolder}/CMSIS/Device/ST/STM32F1xx/Include",
-				"${workspaceFolder}/CMSIS/Include",
-				"${workspaceFolder}/hal"
+				"${workspaceFolder}/hal",
+                "${workspaceFolder}/hal/CMSIS",
+                "${workspaceFolder}/hal/CMSIS/Device/ST/STM32F1xx/Include",
+				"${workspaceFolder}/hal/CMSIS/Include",
+				"${workspaceFolder}/libs/LCD1602",
+				"${workspaceFolder}/libs/PCF8574T"
             ],
             "defines": [
                 "STM32F103xB"
