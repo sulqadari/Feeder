@@ -21,14 +21,14 @@ extern "C" {
 #include "PCF8574T.h"		// <-- Needs for LCD1602 I2C
 
 // PCF8574T pinout
-#define LCD1602_RS_Pin		0
-#define LCD1602_RW_Pin		1
-#define LCD1602_E_Pin		2
+#define LCD1602_RS_Pin		0	/* data type: 1 - data;  0 - cmd; */
+#define LCD1602_RW_Pin		1	/* direction: 1 - write; 0 - read; */
+#define LCD1602_E_Pin		2	/* Clock source */
 #define LCD1602_LED_Pin		3
-#define LCD1602_D4_Pin		4
-#define LCD1602_D5_Pin		5
-#define LCD1602_D6_Pin		6
-#define LCD1602_D7_Pin		7
+#define LCD1602_D4_Pin		4	/* Data pin 4 */
+#define LCD1602_D5_Pin		5	/* Data pin 5 */
+#define LCD1602_D6_Pin		6	/* Data pin 6 */
+#define LCD1602_D7_Pin		7	/* Data pin 7 */
 
 typedef enum {
 	LCD1602_COMMAND = 0,
