@@ -19,12 +19,16 @@ extern "C" {
 
 #define PCF8574T_ADDRESS		0x27
 
+#if (0)
 void PCF8574T_Init(void);
 uint8_t PCF8574T_GetStatus(void);
 uint8_t PCF8574T_Read();
 void PCF8574T_Write(uint8_t data);
 uint8_t PCF8574T_ReadPin(uint8_t pin);
 void PCF8574T_WritePin(uint8_t pin, uint8_t state);
+#else
+void PCF8574T_sendByte(uint8_t data);
+#endif
 
 #ifdef __cplusplus
 }

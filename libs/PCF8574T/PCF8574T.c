@@ -7,7 +7,8 @@
 
 #include "PCF8574T.h"
 
-volatile uint8_t PCF8574T_Port = 0xFF;
+#if (0)
+volatile uint8_t PCF8574T_Port = 0x00;
 
 void PCF8574T_Init(void) {}
 
@@ -60,3 +61,18 @@ void PCF8574T_WritePin(uint8_t pin, uint8_t state) {
 
 	PCF8574T_Write(PCF8574T_Port);
 }
+#else
+
+/////////////////////////////////////////////////
+
+
+void
+PCF8574T_sendByte(uint8_t data)
+{
+	I2C1_Start();
+	// I2C1_SendData(PCF8574T_ADDRESS << 1);
+	I2C1_SendAddress(PCF8574T_ADDRESS, I2C_TRANSMITTER);
+	I2C1_SendData(data);
+	I2C1_Stop();
+}
+#endif

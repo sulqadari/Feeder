@@ -5,6 +5,7 @@
 #include "hal_i2c.h"
 #include "hal_delay.h"
 #include "lcd1602_i2c.h"
+#include "lcd1602_char.h"
 
 int
 main(void)
@@ -21,13 +22,11 @@ main(void)
 	);
 
 	I2C1_Init(I2C_STANDARD);
-	LCD1602_Led(LCD1602_ON);
 	LCD1602_Init();
-	
+
 	while (1) {
 		gpio_toggle(GPIOC_BASE, GPIO13);
 		DWT_delay_ms(1000);
-		LCD1602_Send(LCD1602_DATA, 'a');
 	}
 
 	return 0;

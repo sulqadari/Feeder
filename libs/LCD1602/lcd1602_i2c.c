@@ -17,21 +17,38 @@ volatile uint8_t LCD1602_Led_State = 0;
 // -------------------------------------------
 void LCD1602_Init(void) {
 
-	PCF8574T_WritePin(LCD1602_E_Pin, 0);	// E  LOW
-
 	DWT_delay_ms(50);
-	LCD1602_SendCommand_8bit(0x30);			// 8-bit mode
-	LCD1602_SendCommand_8bit(0x30);			// 8-bit mode
-	LCD1602_SendCommand_8bit(0x30);			// 8-bit mode
-	LCD1602_SendCommand_8bit(0x20);			// 4-bit mode
 
-	LCD1602_SendCommand(0x2C);				// 4-bit mode, 2 lines, font 5x7
-	LCD1602_SendCommand(0x08);				// display off
-	LCD1602_Clear();						// display clear
-	LCD1602_SendCommand(0x06);				// cursor increment, no shift
-	LCD1602_SendCommand(0x0C);				// display on, cursor off, blinking off
+	LCD1602_sendNibble(0x30);
+	DWT_delay_ms(5);
+	
+	LCD1602_sendNibble(0x30);
+	DWT_delay_ms(150);
+
+	LCD1602_sendNibble(0x30);
+	DWT_delay_ms(50);
+
+	LCD1602_sendNibble(0x20);
+	DWT_delay_ms(50);
+
+	LCD1602_sendByte(0x28, LCD1602_COMMAND);
+	DWT_delay_ms(50);
+
+	LCD1602_sendByte(0x0C, LCD1602_COMMAND);
+	DWT_delay_ms(50);
+
+	LCD1602_sendByte(0x01, LCD1602_COMMAND);
+	DWT_delay_ms(2);
+
+	LCD1602_sendByte(0x06, LCD1602_COMMAND);
+	DWT_delay_ms(50);
+
+	LCD1602_sendString("Hello");
+	LCD1602_Pos(1, 2);
+	LCD1602_sendString("World!");
 }
 
+#if(0)
 // -------------------------------------------
 // Main send function
 // -------------------------------------------
@@ -145,4 +162,46 @@ void LCD1602_CreateChar(uint8_t *chr, uint8_t addr) {
 void LCD1602_Led(LCD1602_Led_Type state) {
 
 	LCD1602_Led_State = (uint8_t)state;
+}
+
+#endif
+
+/////////////////////////////////////////
+void
+LCD1602_sendNibble(uint8_t nibble)
+{
+	nibble |= (1 << LCD1602_E_Pin);		// Set E
+	PCF8574T_sendByte(nibble);
+	nibble &= ~(1 << LCD1602_E_Pin);	// Reset E
+	PCF8574T_sendByte(nibble);
+}
+
+void
+LCD1602_sendByte(uint8_t byte, uint8_t type)
+{
+	uint8_t data = 0;
+
+	if (type == LCD1602_DATA)
+		data |= (1 << LCD1602_RS_Pin);
+	
+
+	LCD1602_sendNibble(data | (byte & 0xF0));
+	LCD1602_sendNibble(data | (byte << 4));
+}
+
+void
+LCD1602_sendString(char* string)
+{
+	uint8_t idx = 0;
+	while (string[idx]) {
+		LCD1602_sendByte(string[idx++], LCD1602_DATA);
+	}
+}
+
+void
+LCD1602_Pos(uint8_t line, uint8_t pos)
+{
+	uint8_t address = (line * 0x40 + pos) | 0x80;
+	LCD1602_sendByte(address, LCD1602_COMMAND);
+	DWT_delay_ms(50);
 }

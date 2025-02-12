@@ -15,10 +15,6 @@ void I2C1_Init(I2C_Mode_Type mode) {
 	GPIOB->CRL |= GPIO_CRL_MODE7;					// 11: Output mode, max speed 50 MHz.
 	GPIOB->CRL |= GPIO_CRL_CNF7;					// 11: Alternate function output Open-drain
 
-	// I2C
-	I2C1->CR1 |= I2C_CR1_SWRST;						// 1: I2C Peripheral under reset state
-	I2C1->CR1 = 0;									// Reset
-
 	I2C1->CR2 |= (PCLK1_FREQUENCY / 1000000);		// FREQ[5:0]: Peripheral clock frequency
 
 	if (mode == I2C_STANDARD) {
@@ -30,6 +26,7 @@ void I2C1_Init(I2C_Mode_Type mode) {
 		I2C1->TRISE = (((PCLK1_FREQUENCY / 1000000 * 300) / 1000) + 1);	// TRISE[5:0]: Maximum rise time in Fm/Sm mode (Master mode)
 	}
 
+	I2C1->CR1 = 0;									// Reset
 	I2C1->CR1 |= I2C_CR1_PE;						// 1: Peripheral enable
 }
 

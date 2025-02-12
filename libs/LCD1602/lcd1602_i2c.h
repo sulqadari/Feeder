@@ -41,6 +41,7 @@ typedef enum {
 } LCD1602_Led_Type;
 
 void LCD1602_Init(void);
+#if (0)
 void LCD1602_Send(LCD1602_Data_Type dataType, uint8_t data);
 void LCD1602_SendCommand(uint8_t cmd);
 void LCD1602_SendCommand_8bit(uint8_t cmd);
@@ -50,6 +51,12 @@ void LCD1602_Clear(void);
 void LCD1602_CursorPos(uint8_t x, uint8_t y);
 void LCD1602_CreateChar(uint8_t *chr, uint8_t addr);
 void LCD1602_Led(LCD1602_Led_Type state);
+#else
+void LCD1602_sendNibble(uint8_t nibble);
+void LCD1602_sendByte(uint8_t byte, uint8_t type);
+void LCD1602_sendString(char* string);
+void LCD1602_Pos(uint8_t line, uint8_t pos);
+#endif
 
 #ifdef __cplusplus
 }
