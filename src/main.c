@@ -4,8 +4,6 @@
 #include "hal_gpio.h"
 #include "hal_i2c.h"
 #include "hal_delay.h"
-#include "lcd1602_i2c.h"
-#include "lcd1602_char.h"
 
 int
 main(void)
@@ -20,9 +18,6 @@ main(void)
 		GPIO_CNF_OUTPUT_PUSHPULL,
 		GPIO13			// LED on port C13
 	);
-
-	I2C1_Init(I2C_STANDARD);
-	LCD1602_Init();
 
 	while (1) {
 		gpio_toggle(GPIOC_BASE, GPIO13);

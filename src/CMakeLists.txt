@@ -8,14 +8,12 @@ target_include_directories(${ENTRY_POINT}.elf
 	PUBLIC
 		${PROJECT_SOURCE_DIR}/src
 		${PROJECT_SOURCE_DIR}/hal
-		${PROJECT_SOURCE_DIR}/libs/LCD1602
 		${cmsis_inc_device}
 		${cmsis_inc_core}
 )
 
 target_link_libraries(${ENTRY_POINT}.elf
 	${LIB_HAL}
-	${LIB_LCD1602}
 )
 
 add_custom_command(TARGET ${ENTRY_POINT}.elf
