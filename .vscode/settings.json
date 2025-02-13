@@ -21,6 +21,7 @@
 		"stm32f1xx.h": "c",
 		"hal_i2c.h": "c",
 		"pcf8574t.h": "c",
-		"lcd1602_i2c.h": "c"
+		"lcd1602_i2c.h": "c",
+		"hal_gpio.h": "c"
 	}
 }
