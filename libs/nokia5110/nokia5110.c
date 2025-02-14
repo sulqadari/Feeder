@@ -48,7 +48,6 @@ void
 n5110_init(void)
 {
 	chip_enable();
-	data_mode();
 	rst_enable();
 
 	chip_disable();
@@ -64,6 +63,7 @@ n5110_init(void)
 
 	check_spi();
 	data_mode();
+	n5110_cursor(0, 0);
 }
 
 void
@@ -96,5 +96,8 @@ n5110_cursor(int16_t x, int16_t y)
 void
 n5510_clear_screen(void)
 {
+	for (uint16_t i = 0; i < 504; ++i)
+		n5110_send_data(0x00);
 	
+	n5110_cursor(0, 0);
 }

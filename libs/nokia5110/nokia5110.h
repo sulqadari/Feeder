@@ -31,5 +31,6 @@ void n5110_init(void);
 void n5110_send_data(uint16_t byte);
 void n5110_send_cmd(uint16_t cmd);
 void n5110_cursor(int16_t x, int16_t y);
+void n5510_clear_screen(void);
 
 #endif /* NOKIA_5110_H */
