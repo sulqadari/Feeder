@@ -7,8 +7,7 @@
                 "${workspaceFolder}/hal/CMSIS",
                 "${workspaceFolder}/hal/CMSIS/Device/ST/STM32F1xx/Include",
 				"${workspaceFolder}/hal/CMSIS/Include",
-				"${workspaceFolder}/libs/LCD1602",
-				"${workspaceFolder}/libs/PCF8574T"
+				"${workspaceFolder}/libs/nokia5110"
             ],
             "defines": [
                 "STM32F103xB"

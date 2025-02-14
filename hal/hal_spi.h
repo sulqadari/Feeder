@@ -20,6 +20,7 @@ void SPI1_Init(void);
 void SPI1_EnableSlave(void);
 void SPI1_DisableSlave(void);
 uint16_t SPI1_Write(uint16_t data);
+uint8_t SPI1_IsBusy(void);
 
 #ifdef __cplusplus
 }

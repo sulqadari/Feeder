@@ -13,6 +13,7 @@ set(SIZE				"arm-none-eabi-size")
 set(ENTRY_POINT "FeedMe")
 set(LIB_HAL		"_hal")
 set(LIB_LCD1602 "_lcd1602")
+set(LIB_NOKIA5110 "_nokia5110")
 
 set(cmsis_path			${PROJECT_SOURCE_DIR}/hal/CMSIS)
 set(cmsis_inc_device	${cmsis_path}/Device/ST/STM32F1xx/Include)
@@ -43,3 +44,4 @@ add_link_options(
 
 add_subdirectory(src)
 add_subdirectory(hal)
+add_subdirectory(libs/nokia5110)

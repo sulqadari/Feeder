@@ -11,32 +11,12 @@
 
 void SPI1_Init() {
 
-	rcc_periph_clock_enable(RCC_GPIOA);
-	gpio_set_mode(
-		GPIOA_BASE,
-		GPIO_MODE_OUTPUT_50_MHZ,
-		GPIO_CNF_OUTPUT_ALTFN_PUSHPULL,
-		GPIO5);	// SCK
-	
-	gpio_set_mode(
-		GPIOA_BASE,
-		GPIO_MODE_INPUT,
-		GPIO_CNF_INPUT_PULL_UPDOWN,
-		GPIO6);	// MISO
-	
-	gpio_set_mode(
-		GPIOA_BASE,
-		GPIO_MODE_OUTPUT_50_MHZ,
-		GPIO_CNF_OUTPUT_ALTFN_PUSHPULL,
-		GPIO7);	// MOSI
-	
-	rcc_periph_clock_enable(RCC_SPI1);
-
 	// SPI1
 	SPI1->CR1 = SPI_CR1_MSTR					// 1: Master configuration
-				| SPI_CR1_BR_2					// 110: fPCLK/128
+				| SPI_CR1_BR_2 | SPI_CR1_BR_1 | SPI_CR1_BR_0 // 110: fPCLK/256
 				| SPI_CR1_SSI					// SSI: Internal slave select
-				| SPI_CR1_SSM;					// 1: Software slave management enabled
+				| SPI_CR1_SSM					// 1: Software slave management enabled
+				| SPI_CR1_CPHA;
 
 	#ifdef SPI1_16_BIT_FORMAT
 	SPI1->CR1 |= SPI_CR1_DFF;					// 1: 16-bit data frame format is selected for transmission/reception
@@ -65,4 +45,10 @@ uint16_t SPI1_Write(uint16_t data) {
 	// while (SPI1->SR & SPI_SR_BSY);				// 1: SPI (or I2S) is busy in communication or Tx buffer is not empty
 
 	return (uint16_t)SPI1->DR;
+}
+
+uint8_t
+SPI1_IsBusy(void)
+{
+	return SPI1->SR & SPI_SR_BSY;
 }
