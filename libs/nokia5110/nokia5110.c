@@ -52,17 +52,15 @@ n5110_init(void)
 
 	chip_disable();
 	rst_disable();
-	cmd_mode();
 
 	SPI1_Write(0x21);//exend COM
-	SPI1_Write(0xc1);//voltage offset
-	SPI1_Write(0x06);//temp. correction
-	SPI1_Write(0x13);//high voltage(6.42V) generator on
+	SPI1_Write(0xc1);//voltage offset	(0xc1 or 0xb8)
+	SPI1_Write(0x04);//temp. correction	(0x06 or 0x04)
+	SPI1_Write(0x14);//high voltage(6.42V) generator on (0x13 or 0x14)
 	SPI1_Write(0x20);//standart COM
 	SPI1_Write(0x0C);//LCD on
 
 	check_spi();
-	data_mode();
 	n5110_cursor(0, 0);
 }
 
@@ -96,8 +94,26 @@ n5110_cursor(int16_t x, int16_t y)
 void
 n5510_clear_screen(void)
 {
+	n5110_cursor(0, 0);
 	for (uint16_t i = 0; i < 504; ++i)
 		n5110_send_data(0x00);
 	
 	n5110_cursor(0, 0);
 }
+
+void
+n5510_put_char(char c)
+{
+	for(uint8_t i = 0; i < 6; i++) {
+		n5110_send_data(ASCII[c - 0x20][i]);
+	}
+}
+
+void
+n5510_print_string(char *str, uint8_t x, uint8_t y)
+{
+	n5110_cursor(x, y);
+	while(*str){
+		n5510_put_char(*str++);
+	}
+  }
