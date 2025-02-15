@@ -43,10 +43,6 @@ main(void)
 		n5110_send_data(Telegram_Logo[i]);
 	}
 
-	DWT_delay_ms(1000);
-	n5510_clear_screen();
-	n5510_print_string("Feeder", 40, 4);
-
 	uint32_t cnt = 0;
 	while (1) {
 		gpio_toggle(GPIOC_BASE, LED_PORT);

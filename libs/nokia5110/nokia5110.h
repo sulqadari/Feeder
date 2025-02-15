@@ -17,6 +17,16 @@
 #define MOSI_PORT	GPIO7
 #define LED_PORT	GPIO13
 
+typedef enum {
+	MODE_CMD,
+	MODE_DATA
+} DataMode;
+
+typedef enum {
+	MODE_RESET,
+	MODE_SET
+} CommonMode;
+
 /*	image2cpp params
 	picture: 'Telegram_Logo',
 	canvas: 84x48px,

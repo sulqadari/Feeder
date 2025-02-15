@@ -1,41 +1,33 @@
 #include "nokia5110.h"
 
+/** @param either MODE_SET or MODE_RESET */
 static void
-chip_enable(void)
+reset_mode(uint8_t mode)
 {
-	gpio_set(SPI_PORT, CE_PORT);
+	if (mode)
+		gpio_set(SPI_PORT, RST_PORT);
+	else
+		gpio_clear(SPI_PORT, RST_PORT);
 }
 
+/** @param either MODE_SET or MODE_RESET */
 static void
-chip_disable(void)
+chip_mode(uint8_t mode)
 {
-	gpio_clear(SPI_PORT, CE_PORT);
+	if (mode)
+		gpio_set(SPI_PORT, CE_PORT);
+	else
+		gpio_clear(SPI_PORT, CE_PORT);
 }
 
-void
-rst_enable(void)
-{
-	gpio_set(SPI_PORT, RST_PORT);
-}
-
-void
-rst_disable(void)
-{
-	gpio_clear(SPI_PORT, RST_PORT);
-}
-
-/** The 'high' on the pin activates data mode */
+/** @param mode: either MODE_DATA or MODE_CMD */
 static void
-data_mode(void)
+dc_mode(uint8_t mode)
 {
-	gpio_set(SPI_PORT, DC_PORT);
-}
-
-/** The 'low' on the pin activates command mode */
-static void
-cmd_mode(void)
-{
-	gpio_clear(SPI_PORT, DC_PORT);
+	if (mode)
+		gpio_set(SPI_PORT, DC_PORT);
+	else
+		gpio_clear(SPI_PORT, DC_PORT);
 }
 
 static void
@@ -47,34 +39,37 @@ check_spi(void)
 void
 n5110_init(void)
 {
-	chip_enable();
-	rst_enable();
+	chip_mode(MODE_SET);
+	dc_mode(MODE_DATA);
+	reset_mode(MODE_SET);
+	
+	chip_mode(MODE_RESET);
+	reset_mode(MODE_RESET);
+	dc_mode(MODE_CMD);
 
-	chip_disable();
-	rst_disable();
 
-	SPI1_Write(0x21);//exend COM
-	SPI1_Write(0xc1);//voltage offset	(0xc1 or 0xb8)
-	SPI1_Write(0x04);//temp. correction	(0x06 or 0x04)
-	SPI1_Write(0x14);//high voltage(6.42V) generator on (0x13 or 0x14)
-	SPI1_Write(0x20);//standart COM
-	SPI1_Write(0x0C);//LCD on
+	SPI1_Write(0x21);	// exend commands mode
+	SPI1_Write(0xC1);	// contrast
+	SPI1_Write(0x04);	// temp. coefficient (recommended)
+	SPI1_Write(0x14);	// bias 1:40 (recommended)
+	SPI1_Write(0x20);	// standard commands and horizontal mode
+	SPI1_Write(0x0C);	// LCD normal
 
 	check_spi();
-	n5110_cursor(0, 0);
+	dc_mode(MODE_DATA);
 }
 
 void
 n5110_send_data(uint16_t data)
 {
-	data_mode();
+	dc_mode(MODE_DATA);
 	SPI1_Write(data);
 }
 
 void
 n5110_send_cmd(uint16_t cmd)
 {
-	cmd_mode();
+	dc_mode(MODE_CMD);
 	SPI1_Write(cmd);
 }
 
@@ -95,7 +90,7 @@ void
 n5510_clear_screen(void)
 {
 	n5110_cursor(0, 0);
-	for (uint16_t i = 0; i < 504; ++i)
+	for (uint16_t i = 0; i < 6 * 84; ++i)
 		n5110_send_data(0x00);
 	
 	n5110_cursor(0, 0);
