@@ -14,6 +14,7 @@ main(void)
 	DWT_Init();
 	rcc_periph_clock_enable(RCC_GPIOC);	// Enable clock on LED
 	rcc_periph_clock_enable(RCC_GPIOA);
+	rcc_periph_clock_enable(RCC_AFIO);
 	rcc_periph_clock_enable(RCC_SPI1);
 
 	gpio_set_mode(
@@ -37,16 +38,28 @@ main(void)
 
 	SPI1_Init();
 	n5110_init();
+	DWT_delay_ms(250);
 	n5510_clear_screen();
-
-	for(uint16_t i = 0; i < sizeof(Telegram_Logo); i++) {
-		n5110_send_data(Telegram_Logo[i]);
+	DWT_delay_ms(250);
+	uint16_t idx = 0;
+	// while (1) {
+	// 	gpio_toggle(GPIOC_BASE, LED_PORT);
+	// 	DWT_delay_ms(250);
+	// 	n5110_send_data(Telegram_Logo[idx++]);
+		
+	// 	if (idx > sizeof(Telegram_Logo) - 1) {
+	// 		n5510_clear_screen();
+	// 		idx = 0;
+	// 	}
+	// }
+	for (uint8_t x = 0; x < 5; x++) {
+		for (uint8_t y = 0; y < 5; y++) {
+			gpio_toggle(GPIOC_BASE, LED_PORT);
+			DWT_delay_ms(1000);
+			n5110_cursor(x,y);
+			n5110_send_data(0xFF);
+		}
 	}
 
-	uint32_t cnt = 0;
-	while (1) {
-		gpio_toggle(GPIOC_BASE, LED_PORT);
-		DWT_delay_ms(1000);
-	}
 	return 0;
 }

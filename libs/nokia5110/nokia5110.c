@@ -39,12 +39,12 @@ check_spi(void)
 void
 n5110_init(void)
 {
+	reset_mode(MODE_SET);
 	chip_mode(MODE_SET);
 	dc_mode(MODE_DATA);
-	reset_mode(MODE_SET);
 	
-	chip_mode(MODE_RESET);
 	reset_mode(MODE_RESET);
+	chip_mode(MODE_RESET);
 	dc_mode(MODE_CMD);
 
 
@@ -53,8 +53,8 @@ n5110_init(void)
 	SPI1_Write(0x04);	// temp. coefficient (recommended)
 	SPI1_Write(0x14);	// bias 1:40 (recommended)
 	SPI1_Write(0x20);	// standard commands and horizontal mode
-	SPI1_Write(0x0C);	// LCD normal
-
+	SPI1_Write(0x09);	// All display segments on
+	SPI1_Write(0x0C);	// display normal mode
 	check_spi();
 	dc_mode(MODE_DATA);
 }
@@ -89,11 +89,9 @@ n5110_cursor(int16_t x, int16_t y)
 void
 n5510_clear_screen(void)
 {
-	n5110_cursor(0, 0);
+
 	for (uint16_t i = 0; i < 6 * 84; ++i)
 		n5110_send_data(0x00);
-	
-	n5110_cursor(0, 0);
 }
 
 void

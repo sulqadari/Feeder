@@ -38,13 +38,15 @@ void SPI1_DisableSlave() {
 uint16_t SPI1_Write(uint16_t data) {
 
 	while (!(SPI1->SR & SPI_SR_TXE));			// 0: Tx buffer not empty
+	while (SPI1->SR & SPI_SR_BSY);
 	SPI1->DR = data;
 
 	// while (!(SPI1->SR & SPI_SR_TXE));			// 0: Tx buffer not empty
 	// while (!(SPI1->SR & SPI_SR_RXNE));			// 0: Rx buffer empty
 	// while (SPI1->SR & SPI_SR_BSY);				// 1: SPI (or I2S) is busy in communication or Tx buffer is not empty
 
-	return (uint16_t)SPI1->DR;
+	// return (uint16_t)SPI1->DR;
+	return 0;
 }
 
 uint8_t
