@@ -81,6 +81,7 @@ void n5110_send_data(uint16_t byte);
 void n5110_send_cmd(uint16_t cmd);
 void n5110_cursor(int16_t x, int16_t y);
 void n5510_clear_screen(void);
+void n5510_black_screen(void);
 void n5510_put_char(char c);
 void n5510_print_string(char *str, uint8_t x, uint8_t y);
 

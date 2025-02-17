@@ -56,7 +56,7 @@ main(void)
 		for (uint8_t y = 0; y < 5; y++) {
 			gpio_toggle(GPIOC_BASE, LED_PORT);
 			DWT_delay_ms(1000);
-			n5110_cursor(x,y);
+			n5110_cursor(y,x);
 			n5110_send_data(0xFF);
 		}
 	}
