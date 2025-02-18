@@ -9,23 +9,10 @@
 #define SEGMETS_TOTAL (84)
 #define BANKS_TOTAL (6)
 
-#define SPI_PORT	GPIOA_BASE
-#define CE_PORT		GPIO2
-#define DC_PORT		GPIO3
-#define RST_PORT	GPIO4
-#define SCK_PORT	GPIO5
-#define MOSI_PORT	GPIO7
-#define LED_PORT	GPIO13
-
 typedef enum {
-	MODE_CMD,
-	MODE_DATA
-} DataMode;
-
-typedef enum {
-	MODE_RESET,
-	MODE_SET
-} CommonMode;
+	TYPE_CMD,
+	TYPE_DATA
+} DataType;
 
 /*	image2cpp params
 	picture: 'Telegram_Logo',
@@ -77,9 +64,8 @@ static const unsigned char Telegram_Logo [] = {
 
 
 void n5110_init(void);
-void n5110_send_data(uint16_t byte);
-void n5110_send_cmd(uint16_t cmd);
-void n5110_cursor(int16_t x, int16_t y);
+void n5110_send_cmd(uint8_t byte);
+uint8_t n5110_cursor(uint8_t x, uint8_t y);
 void n5510_clear_screen(void);
 void n5510_black_screen(void);
 void n5510_put_char(char c);

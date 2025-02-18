@@ -14,12 +14,19 @@ extern "C" {
 
 #include "stm32f1xx.h"
 
-//#define SPI1_16_BIT_FORMAT
+#define SPI_PORT	GPIOA_BASE
+#define RST_PIN		GPIO2
+#define DC_PIN		GPIO3
+#define CE_PIN		GPIO4
+#define SCK_PIN		GPIO5
+#define MOSI_PIN	GPIO7
+
+#define LED_PIN		GPIO13
 
 void SPI1_Init(void);
-void SPI1_EnableSlave(void);
-void SPI1_DisableSlave(void);
-uint16_t SPI1_Write(uint16_t data);
+void SPI1_chipEnable(void);
+void SPI1_chipDisable(void);
+void SPI1_Send(uint16_t data);
 uint8_t SPI1_IsBusy(void);
 
 #ifdef __cplusplus

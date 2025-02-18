@@ -9,44 +9,49 @@
 #include "hal_rcc.h"
 #include "hal_gpio.h"
 
-void SPI1_Init() {
+void
+SPI1_Init(void)
+{
+	rcc_periph_clock_enable(RCC_GPIOA);
+	rcc_periph_clock_enable(RCC_AFIO);
+	rcc_periph_clock_enable(RCC_SPI1);
 
-	// SPI1
-	SPI1->CR1 = SPI_CR1_MSTR					// 1: Master configuration
-				| SPI_CR1_BR_2 | SPI_CR1_BR_1 | SPI_CR1_BR_0 // 110: fPCLK/256
-				| SPI_CR1_SSI					// SSI: Internal slave select
-				| SPI_CR1_SSM					// 1: Software slave management enabled
-				| SPI_CR1_CPHA;
+	gpio_set_mode(
+		GPIOA_BASE,
+		GPIO_MODE_OUTPUT_10_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL,
+		RST_PIN  | DC_PIN | CE_PIN);
 
-	#ifdef SPI1_16_BIT_FORMAT
-	SPI1->CR1 |= SPI_CR1_DFF;					// 1: 16-bit data frame format is selected for transmission/reception
-	#endif
-
-	SPI1->CR1 |= SPI_CR1_SPE;					// 1: Peripheral enabled
+	gpio_set_mode(
+		GPIOA_BASE,
+		GPIO_MODE_OUTPUT_10_MHZ,
+		GPIO_CNF_OUTPUT_ALTFN_PUSHPULL,
+		SCK_PIN | MOSI_PIN);			// SCK | MOSI
+	
+	SPI1->CR1 = SPI_CR1_MSTR	// Configuring the SPI as the master
+				| SPI_CR1_BR_2 	// Choose divisor 72MHz / 32 = 2.25 MHz speed
+				| SPI_CR1_SSM	// Software slave management enabled
+				| SPI_CR1_SSI	// Force HIGH on NSS pin (Has effect only when the SPI_CR1_SSM=1)
+				| SPI_CR1_SPE;	// Enable the SPI
 }
 
-void SPI1_EnableSlave() {
-
-	GPIOA->BRR |= GPIO_BRR_BR4;					// 1: Reset the corresponding ODRx bit
+void
+SPI1_chipEnable(void)
+{
+	GPIOA->BRR |= GPIO_BRR_BR4;	// 1: Reset the corresponding ODRx bit
 }
 
-void SPI1_DisableSlave() {
-
-	GPIOA->BSRR |= GPIO_BSRR_BS4;				// 1: Set the corresponding ODRx bit
+void
+SPI1_chipDisable(void)
+{
+	GPIOA->BSRR |= GPIO_BSRR_BS4;	// 1: Set the corresponding ODRx bit
 }
 
-uint16_t SPI1_Write(uint16_t data) {
-
-	while (!(SPI1->SR & SPI_SR_TXE));			// 0: Tx buffer not empty
-	while (SPI1->SR & SPI_SR_BSY);
+void
+SPI1_Send(uint16_t data)
+{
+	while ((SPI1->SR & SPI_SR_TXE) == RESET);	// Wait until the transmit buffer becomes empty
 	SPI1->DR = data;
-
-	// while (!(SPI1->SR & SPI_SR_TXE));			// 0: Tx buffer not empty
-	// while (!(SPI1->SR & SPI_SR_RXNE));			// 0: Rx buffer empty
-	// while (SPI1->SR & SPI_SR_BSY);				// 1: SPI (or I2S) is busy in communication or Tx buffer is not empty
-
-	// return (uint16_t)SPI1->DR;
-	return 0;
 }
 
 uint8_t

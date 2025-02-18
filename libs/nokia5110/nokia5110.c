@@ -1,102 +1,100 @@
 #include "nokia5110.h"
 
-/** @param either MODE_SET or MODE_RESET */
+/**
+ * @param either SET or RESET
+ */
 static void
-reset_mode(uint8_t mode)
-{
-	if (mode)
-		gpio_set(SPI_PORT, RST_PORT);
-	else
-		gpio_clear(SPI_PORT, RST_PORT);
-}
-
-/** @param either MODE_SET or MODE_RESET */
-static void
-chip_mode(uint8_t mode)
-{
-	if (mode)
-		gpio_set(SPI_PORT, CE_PORT);
-	else
-		gpio_clear(SPI_PORT, CE_PORT);
-}
-
-/** @param mode: either MODE_DATA or MODE_CMD */
-static void
-dc_mode(uint8_t mode)
-{
-	if (mode)
-		gpio_set(SPI_PORT, DC_PORT);
-	else
-		gpio_clear(SPI_PORT, DC_PORT);
-}
-
-static void
-check_spi(void)
+set_reset(uint8_t mode)
 {
 	while (SPI1_IsBusy()) { }
+	if (mode)
+		gpio_set(SPI_PORT, RST_PIN);
+	else
+		gpio_clear(SPI_PORT, RST_PIN);
 }
+
+/**
+ * @param mode: either TYPE_DATA or TYPE_CMD
+ */
+static void
+set_data_type(uint8_t mode)
+{
+	if (mode)
+		gpio_set(SPI_PORT, DC_PIN);
+	else
+		gpio_clear(SPI_PORT, DC_PIN);
+}
+	
+/**
+ * @param either SET or RESET
+ */
+static void
+chip_enable_disable(uint8_t mode)
+{
+	if (mode)
+		gpio_set(SPI_PORT, CE_PIN);
+	else
+		gpio_clear(SPI_PORT, CE_PIN);
+}
+
 
 void
 n5110_init(void)
 {
-	reset_mode(MODE_SET);
-	chip_mode(MODE_SET);
-	dc_mode(MODE_DATA);
+	set_reset(RESET);
+	set_reset(SET);
+	n5110_send_cmd(0x21);	// Chip is active; use extended instruction set
+	n5110_send_cmd(0x04);	// temp. coefficient '00' (recommended)
+	n5110_send_cmd(0x14);	// bias 1:40 (recommended)
 	
-	reset_mode(MODE_RESET);
-	chip_mode(MODE_RESET);
-	dc_mode(MODE_CMD);
-
-
-	SPI1_Write(0x21);	// exend commands mode
-	SPI1_Write(0xC1);	// contrast
-	SPI1_Write(0x04);	// temp. coefficient (recommended)
-	SPI1_Write(0x14);	// bias 1:40 (recommended)
-	SPI1_Write(0x20);	// standard commands and horizontal mode
-	SPI1_Write(0x09);	// All display segments on
-	SPI1_Write(0x0C);	// display normal mode
-	check_spi();
-	dc_mode(MODE_DATA);
+	n5110_send_cmd(0x20);	// horizontal addressing; use standard isntruction set;
+	n5110_send_cmd(0x09);	// All display segments on
+	n5110_send_cmd(0x0C);	// display normal mode
 }
 
 void
-n5110_send_data(uint16_t data)
+n5110_send_cmd(uint8_t byte)
 {
-	dc_mode(MODE_DATA);
-	SPI1_Write(data);
+	set_data_type(TYPE_CMD);
+	chip_enable_disable(RESET);
+	SPI1_Send(byte);
+	while (SPI1_IsBusy()) { }
+	chip_enable_disable(SET);
 }
 
 void
-n5110_send_cmd(uint16_t cmd)
+n5110_send_data(uint8_t byte)
 {
-	dc_mode(MODE_CMD);
-	SPI1_Write(cmd);
+	set_data_type(TYPE_DATA);
+	chip_enable_disable(RESET);
+	SPI1_Send(byte);
+	while (SPI1_IsBusy()) { }
+	chip_enable_disable(SET);
 }
 
-void
-n5110_cursor(int16_t x, int16_t y)
+uint8_t
+n5110_cursor(uint8_t x, uint8_t y)
 {
-	if (x < 0 || x > 83)
-		x = 0;
-	
-	if (y < 0 || y > 5)
-		y = 0;
-	
+	if (x > 83 || y > 5)
+		return 0;
+
 	n5110_send_cmd(0x40 | x);
 	n5110_send_cmd(0x80 | y);
+	return 0;
 }
 
 void
 n5510_clear_screen(void)
 {
+	n5110_cursor(0,0);
 	for (uint16_t i = 0; i < 6 * 84; ++i)
 		n5110_send_data(0x00);
-	n5110_cursor(0,0);
 }
 
 void
 n5510_black_screen(void)
 {
+	n5110_cursor(0,0);
 	for (uint16_t i = 0; i < 6 * 84; ++i)
 		n5110_send_data(0xFF);
 }
