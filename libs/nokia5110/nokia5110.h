@@ -5,10 +5,12 @@
 #include "hal_spi.h"
 #include "hal_delay.h"
 #include "font.h"
+#include <stdbool.h>
 
-#define SEGMETS_TOTAL (84)
-#define BANKS_TOTAL (6)
 
+#define N5110_WIDTH 84
+#define N5110_HEIGHT 48
+#define N5110_LCD_LENGTH ((N5110_WIDTH * N5110_HEIGHT) / 8)
 typedef enum {
 	TYPE_CMD,
 	TYPE_DATA
@@ -64,11 +66,11 @@ static const unsigned char Telegram_Logo [] = {
 
 
 void n5110_init(void);
-void n5110_send_cmd(uint8_t byte);
 uint8_t n5110_cursor(uint8_t x, uint8_t y);
 void n5510_clear_screen(void);
 void n5510_black_screen(void);
-void n5510_put_char(char c);
-void n5510_print_string(char *str, uint8_t x, uint8_t y);
+void n5510_print_logo(void);
+// void n5510_put_char(char c);
+// void n5510_print_string(char *str, uint8_t x, uint8_t y);
 
 #endif /* NOKIA_5110_H */

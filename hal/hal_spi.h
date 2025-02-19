@@ -15,11 +15,16 @@ extern "C" {
 #include "stm32f1xx.h"
 
 #define SPI_PORT	GPIOA_BASE
-#define RST_PIN		GPIO2
-#define DC_PIN		GPIO3
+
+// PORT A
 #define CE_PIN		GPIO4
 #define SCK_PIN		GPIO5
 #define MOSI_PIN	GPIO7
+
+// PORT B
+#define RST_PIN		GPIO4
+#define BL_PIN      GPIO5
+#define DC_PIN		GPIO6
 
 #define LED_PIN		GPIO13
 

@@ -23,27 +23,10 @@ main(void)
 
 	SPI1_Init();
 	n5110_init();
+	n5510_print_logo();
 	
-	n5510_clear_screen();
-	
-	uint16_t idx = 0;
-	// while (1) {
-	// 	gpio_toggle(GPIOC_BASE, LED_PIN);
-	// 	DWT_delay_ms(250);
-	// 	n5110_send_data(Telegram_Logo[idx++]);
-		
-	// 	if (idx > sizeof(Telegram_Logo) - 1) {
-	// 		n5510_clear_screen();
-	// 		idx = 0;
-	// 	}
-	// }
-	for (uint8_t x = 0; x < 5; x++) {
-		for (uint8_t y = 0; y < 5; y++) {
-			gpio_toggle(GPIOC_BASE, LED_PIN);
-			DWT_delay_ms(1000);
-			n5110_cursor(y,x);
-			n5110_send_data(0xFF);
-		}
+	for (volatile int i = 0;;) {
+		i++;
 	}
 
 	return 0;
