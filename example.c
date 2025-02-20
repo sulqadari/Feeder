@@ -1,12 +1,15 @@
-#include "stm32f1xx.h"
+#include "stm32f10x.h"
+#include "stm32f10x_rcc.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_spi.h"
 
 #define PORT GPIOA
-#define SCK GPIO_Pin_5
-#define MOSI GPIO_Pin_7
 
+#define CE GPIO_Pin_2
 #define DC GPIO_Pin_3
 #define RST GPIO_Pin_4
-#define CE GPIO_Pin_2
+#define SCK GPIO_Pin_5
+#define MOSI GPIO_Pin_7
 
 void gpio_en(){
    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_SPI1, ENABLE);

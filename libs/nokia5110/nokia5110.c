@@ -1,7 +1,7 @@
 #include "nokia5110.h"
 
-#define SLAVE_SELECT 	gpio_clear(SPI_PORT, CE_PIN)
-#define SLAVE_DESELECT	gpio_set(GPIOB_BASE, RST_PIN)
+#define SLAVE_SELECT 	gpio_set(SPI_PORT, CE_PIN)
+#define SLAVE_DESELECT	gpio_clear(SPI_PORT, CE_PIN)
 /**
  * NOTE: due to inverted logic of the n5110 module, where LOW state designates
  * 'active' state, passing in 'true' puts the 'RST' line to low.
@@ -12,22 +12,21 @@ reset_module(bool mode)
 {
 	while (SPI1_IsBusy()) { }
 	if (mode) {
-		gpio_clear(GPIOB_BASE, RST_PIN);
+		gpio_set(SPI_PORT, RST_PIN);
 	} else {
-		gpio_set(GPIOB_BASE, RST_PIN);
+		gpio_clear(SPI_PORT, RST_PIN);
 	}
 }
 
 static void
 send_byte(uint8_t byte, DataType type)
 {
+	while (SPI1_IsBusy()) { }
 	if (type == TYPE_CMD) {
-		while (SPI1_IsBusy()) { }
-		gpio_clear(GPIOB_BASE, DC_PIN);
+		gpio_clear(SPI_PORT, DC_PIN);
 	}
 	else {
-		while (SPI1_IsBusy()) { }
-		gpio_set(GPIOB_BASE, DC_PIN);
+		gpio_set(SPI_PORT, DC_PIN);
 	}
 
 	SPI1_Send(byte);
@@ -36,9 +35,14 @@ send_byte(uint8_t byte, DataType type)
 void
 n5110_init(void)
 {
-	reset_module(true);
-	reset_module(false);
 	SLAVE_SELECT;
+	gpio_set(SPI_PORT, DC_PIN);
+	reset_module(true);
+
+	SLAVE_DESELECT;
+	reset_module(false);
+	gpio_clear(SPI_PORT, DC_PIN);
+	
 	send_byte(0x21, TYPE_CMD);	// Chip is active; use extended instruction set
 	send_byte(0x14, TYPE_CMD);	// bias 1:40 (recommended)
 	send_byte(0x04, TYPE_CMD);	// temp. coefficient '00' (recommended)
@@ -46,7 +50,10 @@ n5110_init(void)
 	send_byte(0x20, TYPE_CMD);	// horizontal addressing; use standard isntruction set;
 	send_byte(0x09, TYPE_CMD);	// All display segments on
 	send_byte(0x0C, TYPE_CMD);	// display normal mode
-	SLAVE_DESELECT;
+	
+	while (SPI1_IsBusy()) { }
+	gpio_set(SPI_PORT, DC_PIN);
+
 	n5510_clear_screen();
 }
 
