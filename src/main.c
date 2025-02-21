@@ -25,8 +25,9 @@ main(void)
 	n5110_init();
 	n5510_print_logo();
 	
-	for (volatile int i = 0;;) {
-		i++;
+	while (1) {
+		DWT_delay_ms(1000);
+		gpio_toggle(GPIOC_BASE, LED_PIN);
 	}
 
 	return 0;

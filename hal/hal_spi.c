@@ -43,7 +43,7 @@ SPI1_Init(void)
 	SPI1->CR1 = SPI_CR1_MSTR	// Configuring the SPI as the master
 				| SPI_CR1_BR_2 	// Choose divisor 72MHz / 32 = 2.25 MHz speed
 				| SPI_CR1_SSM	// Software slave management enabled
-				// | SPI_CR1_SSI	// Force HIGH on NSS pin (Has effect only when the SPI_CR1_SSM=1)
+				| SPI_CR1_SSI	// Force HIGH on NSS pin (Has effect only when the SPI_CR1_SSM=1)
 				| SPI_CR1_SPE;	// Enable the SPI
 }
 
