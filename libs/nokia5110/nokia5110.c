@@ -44,9 +44,7 @@ n5110_send(uint8_t data, uint8_t type)
 	else
 		CMD_MODE;
 	
-	// NSS_LOW;
 	SPI1_Send(data);
-	// NSS_HIGH;
 }
 
 void
@@ -54,12 +52,10 @@ n5110_fill_in(uint8_t fill)
 {
 	while (SPI1_IsBusy());
 	DATA_MODE;
-	// NSS_LOW;
 
 	for (uint16_t i = 0; i < LCD_BUFFER_SIZE; ++i) {
 		SPI1_Send(fill);
 	}
-	// NSS_HIGH;
 }
 
 void
@@ -67,12 +63,10 @@ n5110_print_logo(void)
 {
 	while (SPI1_IsBusy());
 	DATA_MODE;
-	// NSS_LOW;
 
 	for (uint16_t i = 0; i < LCD_BUFFER_SIZE; ++i) {
 		SPI1_Send(Telegram_Logo[i]);
 	}
-	// NSS_HIGH;
 }
 
 uint8_t
@@ -84,15 +78,11 @@ n5110_set_cursor(uint8_t x, uint8_t y)
 		return 2;
 	}
 
-	
 	while (SPI1_IsBusy());
 	CMD_MODE;
-	// NSS_LOW;
 
 	SPI1_Send(0x40 | x);
 	SPI1_Send(0x80 | y);
-
-	// NSS_HIGH;
 
 	return 0;
 }
@@ -102,5 +92,6 @@ n5110_test(uint8_t value, uint8_t x, uint8_t y)
 {
 	n5110_set_cursor(x, y);
 	n5110_send(value, DATA_TYPE_DATA);
+
 	return 0;
 }
