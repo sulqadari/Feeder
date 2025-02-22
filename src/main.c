@@ -24,8 +24,14 @@ main(void)
 	n5110_init();
 	
 	while (1) {
+		n5110_set_cursor(0, 0);
+		n5110_print_logo();
 		DWT_delay_ms(1000);
+
 		gpio_toggle(GPIOC_BASE, LED_PIN);
+
+		n5110_fill_in(0x00);
+		DWT_delay_ms(1000);
 	}
 
 	return 0;
