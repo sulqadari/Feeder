@@ -17,21 +17,21 @@ extern "C" {
 #define SPI_PORT	GPIOA_BASE
 
 // PORT A
-#define CE_PIN		GPIO4
+
+#define RST_PIN		GPIO1
+#define DC_PIN		GPIO2
+#define SE_PIN		GPIO3
+
 #define SCK_PIN		GPIO5
 #define MOSI_PIN	GPIO7
 
-// PORT B
-#define RST_PIN		GPIO4
-#define BL_PIN      GPIO5
-#define DC_PIN		GPIO6
 
 #define LED_PIN		GPIO13
 
 void SPI1_Init(void);
 void SPI1_chipEnable(void);
 void SPI1_chipDisable(void);
-void SPI1_Send(uint16_t data);
+void SPI1_Send(uint8_t data);
 uint8_t SPI1_IsBusy(void);
 
 #ifdef __cplusplus

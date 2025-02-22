@@ -4,6 +4,7 @@
 #include "hal_gpio.h"
 #include "hal_wdt.h"
 #include "hal_spi.h"
+#include "nokia5110.h"
 
 int
 main(void)
@@ -20,6 +21,7 @@ main(void)
 	);
 
 	SPI1_Init();
+	n5110_init();
 	
 	while (1) {
 		DWT_delay_ms(1000);

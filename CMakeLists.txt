@@ -44,4 +44,4 @@ add_link_options(
 
 add_subdirectory(src)
 add_subdirectory(hal)
-# add_subdirectory(libs/nokia5110)
+add_subdirectory(libs/nokia5110)
