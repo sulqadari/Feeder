@@ -21,17 +21,8 @@ n5110_init(void)
 
 	n5110_set_cursor(0, 0);
 	n5110_fill_in(0x00);
-	DWT_delay_ms(1000);
-
-	n5110_set_cursor(0, 0);
-	n5110_fill_in(0xaa);
-	DWT_delay_ms(1000);
 	
 	n5110_set_cursor(0, 0);
-	n5110_print_logo();
-
-	DWT_delay_ms(1000);
-	n5110_fill_in(0x00);
 
 	while (SPI1_IsBusy());
 	NSS_HIGH;
@@ -98,19 +89,6 @@ n5110_set_cursor(uint8_t x, uint8_t y)
 
 	SPI1_Send(0x40 | x);
 	SPI1_Send(0x80 | y);
-
-	while (SPI1_IsBusy());
-	NSS_HIGH;
-	return 0;
-}
-
-uint8_t
-n5110_test(uint8_t value, uint8_t x, uint8_t y)
-{
-	n5110_set_cursor(x, y);
-
-	NSS_LOW;
-	n5110_send(value, DATA_TYPE_DATA);
 
 	while (SPI1_IsBusy());
 	NSS_HIGH;
