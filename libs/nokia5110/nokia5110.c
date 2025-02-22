@@ -95,3 +95,23 @@ n5110_test(uint8_t value, uint8_t x, uint8_t y)
 
 	return 0;
 }
+
+void
+n5510_put_char(char c)
+{
+	while (SPI1_IsBusy());
+	DATA_MODE;
+	
+	for(uint8_t i = 0; i < 6; i++) {
+		SPI1_Send(ASCII[c - 0x20][i]);
+	}
+}
+
+void
+n5510_print_string(char *str, uint8_t x, uint8_t y)
+{
+	n5110_set_cursor(x, y);
+	while(*str){
+		n5510_put_char(*str++);
+	}
+}
