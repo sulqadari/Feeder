@@ -1,4 +1,4 @@
-#include "hal_delay.h"
+#include "hal_wdt.h"
 
 #define MS_COEFF (SystemCoreClock / 1000)
 #define US_COEFF (SystemCoreClock / 1000000)

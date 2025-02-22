@@ -2,10 +2,8 @@
 #include "stm32f1xx.h"
 #include "hal_rcc.h"
 #include "hal_gpio.h"
-#include "hal_i2c.h"
-#include "hal_delay.h"
+#include "hal_wdt.h"
 #include "hal_spi.h"
-#include "nokia5110.h"
 
 int
 main(void)
@@ -22,8 +20,6 @@ main(void)
 	);
 
 	SPI1_Init();
-	n5110_init();
-	n5510_print_logo();
 	
 	while (1) {
 		DWT_delay_ms(1000);

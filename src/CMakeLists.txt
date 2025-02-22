@@ -15,7 +15,7 @@ target_include_directories(${ENTRY_POINT}.elf
 
 target_link_libraries(${ENTRY_POINT}.elf
 	${LIB_HAL}
-	${LIB_NOKIA5110}
+	# ${LIB_NOKIA5110}
 )
 
 add_custom_command(TARGET ${ENTRY_POINT}.elf
