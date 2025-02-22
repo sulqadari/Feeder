@@ -24,12 +24,12 @@ main(void)
 	n5110_init();
 	
 	while (1) {
-		while (SPI1_IsBusy());
+
 		n5110_set_cursor(0, 0);
 		n5110_fill_in(0x00);
 		n5110_print_logo();
 		
-		DWT_delay_ms(1000);
+		DWT_delay_ms(5000);
 		
 		gpio_toggle(GPIOC_BASE, LED_PIN);
 		
@@ -38,10 +38,8 @@ main(void)
 		n5110_set_cursor(0, 0);
 
 		for (uint8_t x = 0; x < 6; ++x) {
-			for (uint8_t y = 0; y < 6; ++y) {
-				n5510_print_string("Freeder", x, y);
-				DWT_delay_ms(1000);
-			}
+			n5510_print_string("Freeder", x, 0);
+			DWT_delay_ms(1000);
 		}
 	}
 

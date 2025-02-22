@@ -13,7 +13,7 @@
 #define LCD_HEIGHT		48
 #define LCD_BUFFER_SIZE	((LCD_WIDTH * LCD_HEIGHT) / 8)
 
-#define NSS_HIGH		gpio_set(GPIOA_BASE, SE_PIN)
+#define NSS_HIGH	gpio_set(GPIOA_BASE, SE_PIN)
 #define NSS_LOW		gpio_clear(GPIOA_BASE, SE_PIN)
 
 #define DATA_MODE	gpio_set(GPIOA_BASE, DC_PIN)
