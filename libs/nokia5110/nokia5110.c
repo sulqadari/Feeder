@@ -1,4 +1,5 @@
 #include "nokia5110.h"
+#include "hal_wdt.h"
 
 void
 n5110_init(void)
@@ -21,6 +22,8 @@ n5110_init(void)
 	n5110_fill_in(0x00);
 	DWT_delay_ms(1000);
 	n5110_fill_in(0xaa);
+	DWT_delay_ms(1000);
+	n5110_print_logo();
 }
 
 void
@@ -43,6 +46,18 @@ n5110_fill_in(uint8_t fill)
 
 	for (uint16_t i = 0; i < LCD_BUFFER_SIZE; ++i) {
 		SPI1_Send(fill);
+	}
+	NSS_HIGH;
+}
+
+void n5110_print_logo(void)
+{
+	while (SPI1_IsBusy());
+	DATA_MODE;
+	NSS_LOW;
+
+	for (uint16_t i = 0; i < LCD_BUFFER_SIZE; ++i) {
+		SPI1_Send(Telegram_Logo[i]);
 	}
 	NSS_HIGH;
 }

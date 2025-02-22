@@ -3,6 +3,7 @@
 
 #include "hal_spi.h"
 #include "hal_gpio.h"
+#include "logos.h"
 
 #define DATA_TYPE_CMD	0x00
 #define DATA_TYPE_DATA	0x01
@@ -23,5 +24,6 @@
 void n5110_init(void);
 void n5110_send(uint8_t data, uint8_t type);
 void n5110_fill_in(uint8_t fill);
+void n5110_print_logo(void);
 
 #endif /* NOKIA_H5110_H */
