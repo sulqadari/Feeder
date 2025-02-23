@@ -37,8 +37,8 @@ main(void)
 		n5110_fill_in(0x00);
 		n5110_set_cursor(0, 0);
 
-		for (uint8_t x = 0; x < 6; ++x) {
-			n5510_print_string("Freeder", x, 0);
+		for (uint8_t y = 0; y < 6; ++y) {
+			n5510_print_string("Freeder", y, 0);
 			DWT_delay_ms(1000);
 		}
 	}

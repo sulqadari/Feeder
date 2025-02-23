@@ -39,6 +39,10 @@
 #define DIS_CONF_SEGS_ON	0x09
 #define DIS_CONF_INVERSE	0x0D
 
+#define OPERATION_VOLTAGE	0x80	/*<! Affects the brightness of the pixels. */
+#define TEMP_COEFF			0x04
+#define BIAS_SYSTEM			0x10
+
 void n5110_init(void);
 void n5110_send(uint8_t data, uint8_t type);
 void n5110_fill_in(uint8_t fill);
