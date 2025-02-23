@@ -128,7 +128,7 @@ n5110_print_clock(uint8_t sec, uint8_t min, uint8_t hour)
 {
 	memset(str_buff, 0, sizeof(str_buff));
 
-	uint32_t len = mini_snprintf(str_buff, sizeof(str_buff), "%02d:%02d:%02d", hour, min, sec);
+	mini_snprintf(str_buff, sizeof(str_buff), "%02d:%02d:%02d", hour, min, sec);
 
 	NSS_LOW;
 	while (SPI1_IsBusy());

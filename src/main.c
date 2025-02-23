@@ -5,6 +5,7 @@
 #include "hal_wdt.h"
 #include "hal_spi.h"
 #include "nokia5110.h"
+#include "ugui_main.h"
 
 typedef struct {
 	uint8_t sec;
@@ -41,6 +42,7 @@ int
 main(void)
 {
 	Clock_t clock;
+	UG_GUI ugui;
 
 	rcc_set_hse72();
 	DWT_Init();
@@ -56,7 +58,8 @@ main(void)
 	SPI1_Init();
 	n5110_init();
 	n5110_set_cursor(0, 0);
-
+	ugui_init(&ugui);
+#if(0)
 	memset(&clock, 0x00, sizeof(Clock_t));
 	set_clock(&clock, 19, 35, 00);
 
@@ -68,5 +71,20 @@ main(void)
 		n5110_print_clock(clock.sec,clock.min, clock.hour);
 	}
 
+#else
+
+	while (1) {
+		DWT_delay_ms(1000);
+		gpio_toggle(GPIOC_BASE, LED_PIN);
+		for (uint16_t x = 0; x < LCD_WIDTH; ++x) {
+			for (uint16_t y = 0; y < LCD_HEIGHT; ++y) {
+				ugui_draw_pixel(x, y, C_BLACK);
+				DWT_delay_ms(100);
+			}
+		}
+		
+		n5110_fill_in(0x00);
+	}
+	#endif
 	return 0;
 }
