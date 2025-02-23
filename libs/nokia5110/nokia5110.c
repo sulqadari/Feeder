@@ -1,5 +1,9 @@
 #include "nokia5110.h"
 #include "hal_wdt.h"
+#include "font.h"
+#include "miniprintf.h"
+
+static char str_buff[256];
 
 void
 n5110_init(void)
@@ -94,8 +98,8 @@ n5110_set_cursor(uint8_t x, uint8_t y)
 	return 0;
 }
 
-void
-n5510_put_char(char c)
+static void
+put_char(char c)
 {
 	for(uint8_t i = 0; i < 6; i++) {
 		SPI1_Send(ASCII[c - 0x20][i]);
@@ -103,7 +107,7 @@ n5510_put_char(char c)
 }
 
 void
-n5510_print_string(char *str, uint8_t x, uint8_t y)
+n5110_print_string(char *str, uint8_t x, uint8_t y)
 {
 	n5110_set_cursor(x, y);
 
@@ -112,7 +116,28 @@ n5510_print_string(char *str, uint8_t x, uint8_t y)
 	DATA_MODE;
 
 	while(*str){
-		n5510_put_char(*str++);
+		put_char(*str++);
+	}
+
+	while (SPI1_IsBusy());
+	NSS_HIGH;
+}
+
+void
+n5110_print_clock(uint8_t sec, uint8_t min, uint8_t hour)
+{
+	memset(str_buff, 0, sizeof(str_buff));
+
+	uint32_t len = mini_snprintf(str_buff, sizeof(str_buff), "%02d:%02d:%02d", hour, min, sec);
+
+	NSS_LOW;
+	while (SPI1_IsBusy());
+	DATA_MODE;
+
+	char* pBuff = str_buff;
+	
+	while(*pBuff) {
+		put_char(*pBuff++);
 	}
 
 	while (SPI1_IsBusy());

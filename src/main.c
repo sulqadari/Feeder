@@ -6,9 +6,42 @@
 #include "hal_spi.h"
 #include "nokia5110.h"
 
+typedef struct {
+	uint8_t sec;
+	uint8_t min;
+	uint8_t hour;
+} Clock_t;
+
+static void
+increment(Clock_t* clock)
+{
+	clock->sec++;
+	if (clock->sec >= 60) {
+		clock->sec = 0;
+		clock->min++;
+		if (clock->min >= 60) {
+			clock->min = 0;
+			clock->hour++;
+			if (clock->hour >= 24) {
+				clock->hour = 0;
+			}
+		}
+	}
+}
+
+static void
+set_clock(Clock_t* clock, uint8_t h, uint8_t m, uint8_t s)
+{
+	clock->hour = h;
+	clock->min = m;
+	clock->sec = s;
+}
+
 int
 main(void)
 {
+	Clock_t clock;
+
 	rcc_set_hse72();
 	DWT_Init();
 
@@ -22,25 +55,17 @@ main(void)
 
 	SPI1_Init();
 	n5110_init();
-	
+	n5110_set_cursor(0, 0);
+
+	memset(&clock, 0x00, sizeof(Clock_t));
+	set_clock(&clock, 19, 35, 00);
+
 	while (1) {
-
-		n5110_set_cursor(0, 0);
-		n5110_fill_in(0x00);
-		n5110_print_logo();
-		
-		DWT_delay_ms(5000);
-		
+		n5110_set_cursor(LCD_WIDTH / 7, 2);
+		increment(&clock);
+		DWT_delay_ms(1000);
 		gpio_toggle(GPIOC_BASE, LED_PIN);
-		
-		n5110_set_cursor(0, 0);
-		n5110_fill_in(0x00);
-		n5110_set_cursor(0, 0);
-
-		for (uint8_t y = 0; y < 6; ++y) {
-			n5510_print_string("Freeder", y, 0);
-			DWT_delay_ms(1000);
-		}
+		n5110_print_clock(clock.sec,clock.min, clock.hour);
 	}
 
 	return 0;
