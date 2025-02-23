@@ -5265,14 +5265,14 @@ void _UG_PutChar( char chr, UG_S16 x, UG_S16 y, UG_COLOR fc, UG_COLOR bc, const 
 
    switch ( bt )
    {
-      case 0xF6: bt = 0x94; break; // ö
-      case 0xD6: bt = 0x99; break; // Ö
-      case 0xFC: bt = 0x81; break; // ü
-      case 0xDC: bt = 0x9A; break; // Ü
-      case 0xE4: bt = 0x84; break; // ä
-      case 0xC4: bt = 0x8E; break; // Ä
-      case 0xB5: bt = 0xE6; break; // µ
-      case 0xB0: bt = 0xF8; break; // °
+      case 0xF6: bt = 0x94; break; // ï¿½
+      case 0xD6: bt = 0x99; break; // ï¿½
+      case 0xFC: bt = 0x81; break; // ï¿½
+      case 0xDC: bt = 0x9A; break; // ï¿½
+      case 0xE4: bt = 0x84; break; // ï¿½
+      case 0xC4: bt = 0x8E; break; // ï¿½
+      case 0xB5: bt = 0xE6; break; // ï¿½
+      case 0xB0: bt = 0xF8; break; // ï¿½
    }
 
    if (bt < font->start_char || bt > font->end_char) return;
@@ -5387,95 +5387,95 @@ void _UG_PutChar( char chr, UG_S16 x, UG_S16 y, UG_COLOR fc, UG_COLOR bc, const 
 
 void _UG_PutText(UG_TEXT* txt)
 {
-   UG_U16 sl,rc,wl;
-   UG_S16 xp,yp;
-   UG_S16 xs=txt->a.xs;
-   UG_S16 ys=txt->a.ys;
-   UG_S16 xe=txt->a.xe;
-   UG_S16 ye=txt->a.ye;
-   UG_U8  align=txt->align;
-   UG_S16 char_width=txt->font->char_width;
-   UG_S16 char_height=txt->font->char_height;
-   UG_S16 char_h_space=txt->h_space;
-   UG_S16 char_v_space=txt->v_space;
+	UG_U16 sl,rc,wl;
+	UG_S16 xp,yp;
+	UG_S16 xs = txt->a.xs;
+	UG_S16 ys = txt->a.ys;
+	UG_S16 xe = txt->a.xe;
+	UG_S16 ye = txt->a.ye;
+	UG_U8  align = txt->align;
+	UG_S16 char_width = txt->font->char_width;
+	UG_S16 char_height = txt->font->char_height;
+	UG_S16 char_h_space = txt->h_space;
+	UG_S16 char_v_space = txt->v_space;
 
-   char chr;
+	char chr;
 
-   char* str = txt->str;
-   char* c = str;
+	char* str = txt->str;
+	char* c = str;
 
-   if ( txt->font->p == NULL ) return;
-   if ( str == NULL ) return;
-   if ( (ye - ys) < txt->font->char_height ) return;
+	if ( txt->font->p == NULL ) return;
+	if ( str == NULL ) return;
+	if ( (ye - ys) < txt->font->char_height ) return;
 
-   rc=1;
-   c=str;
-   while ( *c != 0 )
-   {
-      if ( *c == '\n' ) rc++;
-      c++;
-   }
+	rc=1;
+	c=str;
+	while ( *c != 0 ) {
+		if ( *c == '\n' ) rc++;
+		c++;
+	}
 
-   yp = 0;
-   if ( align & (ALIGN_V_CENTER | ALIGN_V_BOTTOM) )
-   {
-      yp = ye - ys + 1;
-      yp -= char_height*rc;
-      yp -= char_v_space*(rc-1);
-      if ( yp < 0 ) return;
-   }
-   if ( align & ALIGN_V_CENTER ) yp >>= 1;
-   yp += ys;
+	yp = 0;
+	if (align & (ALIGN_V_CENTER | ALIGN_V_BOTTOM)) {
+		yp = ye - ys + 1;
+		yp -= char_height * rc;
+		yp -= char_v_space * (rc - 1);
+		if (yp < 0) return;
+	}
 
-   while( 1 )
-   {
-      sl=0;
-      c=str;
-      wl = 0;
-      while( (*c != 0) && (*c != '\n') )
-      {
-         if (*c < txt->font->start_char || *c > txt->font->end_char) {c++; continue;}
-         sl++;
-         wl += (txt->font->widths ? txt->font->widths[*c - txt->font->start_char] : char_width) + char_h_space;
-         c++;
-      }
-      wl -= char_h_space;
+	if ( align & ALIGN_V_CENTER )
+		yp >>= 1;
+	
+	yp += ys;
 
-      xp = xe - xs + 1;
-      xp -= wl;
-      if ( xp < 0 ) return;
+	while( 1 ) {
+		sl = 0;
+		c = str;
+		wl = 0;
+		while( (*c != 0) && (*c != '\n') )
+		{
+			if (*c < txt->font->start_char || *c > txt->font->end_char) {c++; continue;}
+			sl++;
+			wl += (txt->font->widths ? txt->font->widths[*c - txt->font->start_char] : char_width) + char_h_space;
+			c++;
+		}
 
-      if ( align & ALIGN_H_LEFT ) xp = 0;
-      else if ( align & ALIGN_H_CENTER ) xp >>= 1;
-      xp += xs;
+		wl -= char_h_space;
 
-      while( (*str != '\n') )
-      {
-         chr = *str++;
-         if ( chr == 0 ) return;
-         _UG_PutChar(chr,xp,yp,txt->fc,txt->bc,txt->font);
-         xp += (txt->font->widths ? txt->font->widths[chr - txt->font->start_char] : char_width) + char_h_space;
-      }
-      str++;
-      yp += char_height + char_v_space;
-   }
+		xp = xe - xs + 1;
+		xp -= wl;
+		
+		if ( xp < 0 ) return;
+
+		if ( align & ALIGN_H_LEFT ) xp = 0;
+		else if ( align & ALIGN_H_CENTER ) xp >>= 1;
+		xp += xs;
+
+		while( (*str != '\n') )
+		{
+			chr = *str++;
+			if ( chr == 0 ) return;
+			_UG_PutChar(chr,xp,yp,txt->fc,txt->bc,txt->font);
+			xp += (txt->font->widths ? txt->font->widths[chr - txt->font->start_char] : char_width) + char_h_space;
+		}
+		str++;
+		yp += char_height + char_v_space;
+	}
 }
 
 UG_OBJECT* _UG_GetFreeObject( UG_WINDOW* wnd )
 {
-   UG_U8 i;
-   UG_OBJECT* obj=(UG_OBJECT*)wnd->objlst;
+	UG_OBJECT* obj = (UG_OBJECT*)wnd->objlst;
 
-   for(i=0;i<wnd->objcnt;i++)
-   {
-      obj = (UG_OBJECT*)(&wnd->objlst[i]);
-      if ( (obj->state & OBJ_STATE_FREE) && (obj->state & OBJ_STATE_VALID) )
-      {
-         /* Free object found! */
-         return obj;
-      }
-   }
-   return NULL;
+	for(UG_U8 i = 0; i < wnd->objcnt; i++) {
+		obj = (UG_OBJECT*)(&wnd->objlst[i]);
+		if ( (obj->state & OBJ_STATE_FREE) && (obj->state & OBJ_STATE_VALID) )
+		{
+			/* Free object found! */
+			return obj;
+		}
+	}
+	return NULL;
 }
 
 UG_OBJECT* _UG_SearchObject( UG_WINDOW* wnd, UG_U8 type, UG_U8 id )

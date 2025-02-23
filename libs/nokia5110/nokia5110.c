@@ -4,12 +4,11 @@
 void
 n5110_init(void)
 {
-	NSS_LOW;
-
 	RESET_LOW;
 	DWT_delay_ms(50);
 	RESET_HIGH;
 
+	NSS_LOW;
 	CMD_MODE;
 	SPI1_Send(FUNC_SET | FUNC_SET_EXT);
 	SPI1_Send(OPERATION_VOLTAGE | (0x45 & 0x7F));
