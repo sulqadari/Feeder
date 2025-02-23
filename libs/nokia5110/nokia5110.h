@@ -22,6 +22,23 @@
 #define RESET_HIGH	gpio_set(GPIOA_BASE, RST_PIN)
 #define RESET_LOW	gpio_clear(GPIOA_BASE, RST_PIN)
 
+#define FUNC_SET		0x20
+#define FUNC_SET_BASIC	0x00
+#define FUNC_SET_EXT	0x01	/*!< Extended functions set */
+#define FUNC_SET_VADDR	0x02	/*!< Vertical addressing */
+#define FUNC_SET_PDMODE	0x04	/*!< Power-down mode */
+
+#define EXT_TEMP_CTRL		0x40	/*!< Extended functions set */
+#define EXT_TEMP_CTRL_C0	0x00
+#define EXT_TEMP_CTRL_C1	0x01
+#define EXT_TEMP_CTRL_C2	0x02
+#define EXT_TEMP_CTRL_C3	0x03
+
+#define DIS_CONF_BLANK		0x08
+#define DIS_CONF_NORMAL		0x0C
+#define DIS_CONF_SEGS_ON	0x09
+#define DIS_CONF_INVERSE	0x0D
+
 void n5110_init(void);
 void n5110_send(uint8_t data, uint8_t type);
 void n5110_fill_in(uint8_t fill);

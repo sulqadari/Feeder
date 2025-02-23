@@ -4,20 +4,20 @@
 void
 n5110_init(void)
 {
-	NSS_HIGH;
-	DATA_MODE;
+	NSS_LOW;
+
+	RESET_LOW;
+	DWT_delay_ms(50);
 	RESET_HIGH;
 
-	NSS_LOW;
-	RESET_LOW;
 	CMD_MODE;
-
-	SPI1_Send(0x21);
+	SPI1_Send(FUNC_SET | FUNC_SET_EXT);
 	SPI1_Send(0xC1);
 	SPI1_Send(0x06);
 	SPI1_Send(0x13);
-	SPI1_Send(0x20);
-	SPI1_Send(0x0C);
+
+	SPI1_Send(FUNC_SET | FUNC_SET_BASIC);
+	SPI1_Send(DIS_CONF_NORMAL);
 
 	n5110_set_cursor(0, 0);
 	n5110_fill_in(0x00);
@@ -87,8 +87,8 @@ n5110_set_cursor(uint8_t x, uint8_t y)
 	while (SPI1_IsBusy());
 	CMD_MODE;
 
-	SPI1_Send(0x40 | x);
-	SPI1_Send(0x80 | y);
+	SPI1_Send(0x80 | x);
+	SPI1_Send(0x40 | y);
 
 	while (SPI1_IsBusy());
 	NSS_HIGH;
