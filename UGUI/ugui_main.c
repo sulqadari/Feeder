@@ -7,7 +7,7 @@ static uint8_t pixmap[LCD_COLUMNS_TOTAL][LCD_ROWS_TOTAL];
 static void
 draw_pixel(UG_S16 x, UG_S16 y, UG_COLOR c)
 {
-	if ( x < 0 || x >= LCD_COLUMNS_TOTAL || y < 0 || y >= LCD_ROWS_TOTAL )
+	if ( x < 0 || x >= LCD_WIDTH || y < 0 || y >= LCD_HEIGHT )
 		return;
 	
 	uint16_t mask = y;						// let's pretend y = 46; store it in mask.
@@ -15,7 +15,7 @@ draw_pixel(UG_S16 x, UG_S16 y, UG_COLOR c)
 	uint8_t* target_byte = &pixmap[x][y];	// get byte
 	uint8_t shift = mask % 8; 				// 46 % 8 = 6, i.e the 6th bit in 5th byte, which is matches with index 46
 
-	if (c = C_BLACK) {
+	if (c == C_BLACK) {
 		*target_byte |=  (1 << shift);
 	} else {
 		*target_byte &= ~(1 << shift);
@@ -26,6 +26,7 @@ void
 ugui_init(UG_GUI* gui)
 {
 	UG_Init(gui, draw_pixel, LCD_WIDTH, LCD_HEIGHT);
+	UG_FontSelect(&FONT_6X10);
 	UG_SetBackcolor(C_WHITE);
 	UG_SetForecolor(C_BLACK);
 }
@@ -61,4 +62,38 @@ ugui_draw_pixel(UG_S16 x0, UG_S16 y0, UG_COLOR c)
 {
 	UG_DrawPixel(x0, y0, c);
 	ugui_update();
+}
+
+void
+ugui_draw_circle(UG_S16 x0, UG_S16 y0, UG_S16 r, UG_COLOR c)
+{
+	UG_DrawCircle(x0, y0, r, c);
+	UG_FillCircle(x0, y0, r, c);
+	ugui_update();
+}
+
+void
+ugui_clear_pixmap(void)
+{
+	memset(pixmap, 0x00, LCD_BUFFER_SIZE);
+}
+
+void
+ugui_draw_line(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
+{
+	UG_DrawLine(x1, y1, x2, y2, c);
+	ugui_update();
+}
+
+void
+ugui_print_string(UG_S16 x, UG_S16 y, char* str)
+{
+	UG_PutString(x, y, str);
+	ugui_update();
+}
+
+void
+ugui_set_font(const UG_FONT* font)
+{
+	UG_FontSelect(font);
 }

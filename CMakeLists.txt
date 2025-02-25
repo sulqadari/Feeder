@@ -27,7 +27,6 @@ add_compile_definitions(
 
 add_compile_options(
 	-Wall
-	-Wno-parentheses
 	-O0
 	-std=c99
 	-g

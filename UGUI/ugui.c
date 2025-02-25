@@ -4552,8 +4552,6 @@ __UG_FONT_DATA unsigned char font_32x53[256][212]={
    const UG_FONT FONT_32X53 = {(unsigned char*)font_32x53,FONT_TYPE_1BPP,32,53,0,255,NULL};
 #endif
 
-
-
 UG_S16 UG_Init( UG_GUI* g, void (*p)(UG_S16,UG_S16,UG_COLOR), UG_S16 x, UG_S16 y )
 {
    UG_U8 i;
@@ -5939,33 +5937,33 @@ UG_RESULT UG_WindowShow( UG_WINDOW* wnd )
 
 UG_RESULT UG_WindowHide( UG_WINDOW* wnd )
 {
-   if ( wnd != NULL )
-   {
-      if ( wnd == gui->active_window )
-      {
-         /* Is there an old window which just lost the focus? */
-         if ( (gui->last_window != NULL) && (gui->last_window->state & WND_STATE_VISIBLE) )
-         {
-            if ( (gui->last_window->xs > wnd->xs) || (gui->last_window->ys > wnd->ys) || (gui->last_window->xe < wnd->xe) || (gui->last_window->ye < wnd->ye) )
-            {
-               _UG_WindowClear( wnd );
-            }
-            gui->next_window = gui->last_window;
-         }
-         else
-         {
-            gui->active_window->state &= ~WND_STATE_VISIBLE;
-            gui->active_window->state |= WND_STATE_UPDATE;
-         }
-      }
-      else
-      {
-         /* If the old window is visible, clear it! */
-         _UG_WindowClear( wnd );
-      }
-      return UG_RESULT_OK;
-   }
-   return UG_RESULT_FAIL;
+	if ( wnd != NULL )
+	{
+		if ( wnd == gui->active_window )
+		{
+			/* Is there an old window which just lost the focus? */
+			if ( (gui->last_window != NULL) && (gui->last_window->state & WND_STATE_VISIBLE) )
+			{
+				if ( (gui->last_window->xs > wnd->xs) || (gui->last_window->ys > wnd->ys) || (gui->last_window->xe < wnd->xe) || (gui->last_window->ye < wnd->ye) )
+				{
+					_UG_WindowClear( wnd );
+				}
+				gui->next_window = gui->last_window;
+			}
+			else
+			{
+				gui->active_window->state &= ~WND_STATE_VISIBLE;
+				gui->active_window->state |= WND_STATE_UPDATE;
+			}
+		}
+		else
+		{
+			/* If the old window is visible, clear it! */
+			_UG_WindowClear( wnd );
+		}
+		return UG_RESULT_OK;
+	}
+	return UG_RESULT_FAIL;
 }
 
 UG_RESULT UG_WindowResize( UG_WINDOW* wnd, UG_S16 xs, UG_S16 ys, UG_S16 xe, UG_S16 ye )

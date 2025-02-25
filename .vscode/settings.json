@@ -26,6 +26,7 @@
 		"stdint.h": "c",
 		"hal_spi.h": "c",
 		"nokia5110.h": "c",
-		"sstream": "c"
+		"sstream": "c",
+		"chrono": "c"
 	}
 }

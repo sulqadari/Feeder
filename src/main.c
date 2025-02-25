@@ -58,7 +58,11 @@ main(void)
 	SPI1_Init();
 	n5110_init();
 	n5110_set_cursor(0, 0);
+
+	n5110_print_logo();
+	DWT_delay_ms(1000);
 	ugui_init(&ugui);
+
 #if(0)
 	memset(&clock, 0x00, sizeof(Clock_t));
 	set_clock(&clock, 19, 35, 00);
@@ -74,17 +78,24 @@ main(void)
 #else
 
 	while (1) {
-		DWT_delay_ms(1000);
+
 		gpio_toggle(GPIOC_BASE, LED_PIN);
-		for (uint16_t x = 0; x < LCD_WIDTH; ++x) {
-			for (uint16_t y = 0; y < LCD_HEIGHT; ++y) {
-				ugui_draw_pixel(x, y, C_BLACK);
-				DWT_delay_ms(100);
-			}
-		}
 		
-		n5110_fill_in(0x00);
+				for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
+					ugui_draw_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_BLACK);
+					DWT_delay_ms(100);
+				}
+		
+		for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
+			ugui_draw_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_WHITE);
+			DWT_delay_ms(100);
+		}
+
+
+		ugui_print_string(17, 14, "Eggplant");
+		DWT_delay_ms(1000);
 	}
-	#endif
+
+#endif
 	return 0;
 }
