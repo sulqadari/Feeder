@@ -51,21 +51,21 @@ ugui_update(void)
 }
 
 void
-ugui_draw_frame(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
+ugui_frame(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
 {
 	UG_DrawFrame(x1, y1, x2, y2, c);
 	ugui_update();
 }
 
 void
-ugui_draw_pixel(UG_S16 x0, UG_S16 y0, UG_COLOR c)
+ugui_pixel(UG_S16 x0, UG_S16 y0, UG_COLOR c)
 {
 	UG_DrawPixel(x0, y0, c);
 	ugui_update();
 }
 
 void
-ugui_draw_circle(UG_S16 x0, UG_S16 y0, UG_S16 r, UG_COLOR c)
+ugui_circle(UG_S16 x0, UG_S16 y0, UG_S16 r, UG_COLOR c)
 {
 	UG_DrawCircle(x0, y0, r, c);
 	UG_FillCircle(x0, y0, r, c);
@@ -79,7 +79,7 @@ ugui_clear_pixmap(void)
 }
 
 void
-ugui_draw_line(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
+ugui_line(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
 {
 	UG_DrawLine(x1, y1, x2, y2, c);
 	ugui_update();

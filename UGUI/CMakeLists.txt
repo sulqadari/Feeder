@@ -1,6 +1,7 @@
 add_library(${LIB_UGUI}
 	ugui_main.c	
 	ugui.c
+	ugui_fonts.c
 )
 
 target_include_directories(${LIB_UGUI}

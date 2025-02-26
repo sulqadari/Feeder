@@ -82,15 +82,14 @@ main(void)
 		gpio_toggle(GPIOC_BASE, LED_PIN);
 		
 				for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
-					ugui_draw_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_BLACK);
+					ugui_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_BLACK);
 					DWT_delay_ms(100);
 				}
 		
 		for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
-			ugui_draw_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_WHITE);
+			ugui_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_WHITE);
 			DWT_delay_ms(100);
 		}
-
 
 		ugui_print_string(17, 14, "Eggplant");
 		DWT_delay_ms(1000);
