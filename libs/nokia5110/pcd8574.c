@@ -1,9 +1,20 @@
-#include "nokia5110.h"
+#include "pcd8574.h"
 #include "hal_wdt.h"
-#include "font.h"
-#include "miniprintf.h"
 
-static char str_buff[256];
+static void
+fill_in(uint8_t fill)
+{
+	NSS_LOW;
+	while (SPI1_IsBusy());
+	DATA_MODE;
+
+	for (uint16_t i = 0; i < LCD_BUFFER_SIZE; ++i) {
+		SPI1_Send(fill);
+	}
+
+	while (SPI1_IsBusy());
+	NSS_HIGH;
+}
 
 void
 n5110_init(void)
@@ -23,55 +34,9 @@ n5110_init(void)
 	SPI1_Send(DIS_CONF_NORMAL);
 
 	n5110_set_cursor(0, 0);
-	n5110_fill_in(0x00);
+	fill_in(0x00);
 	
 	n5110_set_cursor(0, 0);
-
-	while (SPI1_IsBusy());
-	NSS_HIGH;
-}
-
-void
-n5110_send(uint8_t data, uint8_t type)
-{
-	NSS_LOW;
-	while (SPI1_IsBusy());
-
-	if (type == DATA_TYPE_DATA)
-		DATA_MODE;
-	else
-		CMD_MODE;
-	
-	SPI1_Send(data);
-	while (SPI1_IsBusy());
-	NSS_HIGH;
-}
-
-void
-n5110_fill_in(uint8_t fill)
-{
-	NSS_LOW;
-	while (SPI1_IsBusy());
-	DATA_MODE;
-
-	for (uint16_t i = 0; i < LCD_BUFFER_SIZE; ++i) {
-		SPI1_Send(fill);
-	}
-
-	while (SPI1_IsBusy());
-	NSS_HIGH;
-}
-
-void
-n5110_print_logo(void)
-{
-	NSS_LOW;
-	while (SPI1_IsBusy());
-	DATA_MODE;
-
-	for (uint16_t i = 0; i < LCD_BUFFER_SIZE; ++i) {
-		SPI1_Send(Telegram_Logo[i]);
-	}
 
 	while (SPI1_IsBusy());
 	NSS_HIGH;
@@ -89,13 +54,48 @@ n5110_set_cursor(uint8_t x, uint8_t y)
 	NSS_LOW;
 	while (SPI1_IsBusy());
 	CMD_MODE;
-
+	
 	SPI1_Send(0x80 | x);
 	SPI1_Send(0x40 | y);
-
+	
 	while (SPI1_IsBusy());
 	NSS_HIGH;
 	return 0;
+}
+
+#if(0)
+
+void
+n5110_send(uint8_t data, uint8_t type)
+{
+	NSS_LOW;
+	while (SPI1_IsBusy());
+
+	if (type == DATA_TYPE_DATA)
+		DATA_MODE;
+	else
+		CMD_MODE;
+	
+	SPI1_Send(data);
+	while (SPI1_IsBusy());
+	NSS_HIGH;
+}
+
+
+
+void
+n5110_print_logo(void)
+{
+	NSS_LOW;
+	while (SPI1_IsBusy());
+	DATA_MODE;
+
+	for (uint16_t i = 0; i < LCD_BUFFER_SIZE; ++i) {
+		SPI1_Send(Telegram_Logo[i]);
+	}
+
+	while (SPI1_IsBusy());
+	NSS_HIGH;
 }
 
 static void
@@ -143,3 +143,4 @@ n5110_print_clock(uint8_t sec, uint8_t min, uint8_t hour)
 	while (SPI1_IsBusy());
 	NSS_HIGH;
 }
+#endif

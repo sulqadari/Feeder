@@ -1,7 +1,7 @@
 add_library(${LIB_UGUI}
-	ugui_main.c	
 	ugui.c
 	ugui_fonts.c
+	miniprintf.c
 )
 
 target_include_directories(${LIB_UGUI}
@@ -9,5 +9,4 @@ target_include_directories(${LIB_UGUI}
 	PUBLIC ${cmsis_inc_core}
 	PUBLIC ${PROJECT_SOURCE_DIR}/hal
 	PUBLIC ${PROJECT_SOURCE_DIR}/libs/graphics
-	PUBLIC ${PROJECT_SOURCE_DIR}/libs/nokia5110
 )

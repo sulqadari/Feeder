@@ -5,8 +5,6 @@
 #include "hal_gpio.h"
 #include "logos.h"
 
-#include "miniprintf.h"
-
 #define DATA_TYPE_CMD	0x00
 #define DATA_TYPE_DATA	0x01
 
@@ -48,12 +46,6 @@
 #define BIAS_SYSTEM			0x10
 
 void n5110_init(void);
-void n5110_send(uint8_t data, uint8_t type);
-void n5110_fill_in(uint8_t fill);
-void n5110_print_logo(void);
 uint8_t n5110_set_cursor(uint8_t x, uint8_t y);
-
-void n5110_print_string(char *str, uint8_t x, uint8_t y);
-void n5110_print_clock(uint8_t sec, uint8_t min, uint8_t hour);
 
 #endif /* NOKIA_H5110_H */

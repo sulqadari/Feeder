@@ -42,6 +42,9 @@ typedef struct
    UG_U8  *widths;
 } UG_FONT;
 
+#ifdef USE_FONT_CUSTOM
+	extern const UG_FONT FONT_CUSTOM;
+#endif
 #ifdef USE_FONT_4X6
    extern const UG_FONT FONT_4X6;
 #endif

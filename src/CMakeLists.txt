@@ -9,7 +9,7 @@ target_include_directories(${ENTRY_POINT}.elf
 		${PROJECT_SOURCE_DIR}/src
 		${PROJECT_SOURCE_DIR}/hal
 		${PROJECT_SOURCE_DIR}/libs/nokia5110
-		${PROJECT_SOURCE_DIR}/UGUI
+		${PROJECT_SOURCE_DIR}/libs/uGUI
 		${cmsis_inc_device}
 		${cmsis_inc_core}
 )

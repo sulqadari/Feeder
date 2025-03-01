@@ -1,8 +1,6 @@
-#include "ugui_main.h"
+#include "lcd_main.h"
 
 static uint8_t pixmap[LCD_COLUMNS_TOTAL][LCD_ROWS_TOTAL];
-
-
 
 static void
 draw_pixel(UG_S16 x, UG_S16 y, UG_COLOR c)
@@ -23,16 +21,22 @@ draw_pixel(UG_S16 x, UG_S16 y, UG_COLOR c)
 }
 
 void
-ugui_init(UG_GUI* gui)
+lcd_init(UG_GUI* gui)
 {
 	UG_Init(gui, draw_pixel, LCD_WIDTH, LCD_HEIGHT);
-	UG_FontSelect(&FONT_6X10);
+	UG_FontSelect(&FONT_5X12);
 	UG_SetBackcolor(C_WHITE);
 	UG_SetForecolor(C_BLACK);
 }
 
 void
-ugui_update(void)
+lcd_set_font(const UG_FONT* font)
+{
+	UG_FontSelect(font);
+}
+
+void
+lcd_update(void)
 {
 	NSS_LOW;
 	while (SPI1_IsBusy());
@@ -51,49 +55,22 @@ ugui_update(void)
 }
 
 void
-ugui_frame(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
-{
-	UG_DrawFrame(x1, y1, x2, y2, c);
-	ugui_update();
-}
-
-void
-ugui_pixel(UG_S16 x0, UG_S16 y0, UG_COLOR c)
-{
-	UG_DrawPixel(x0, y0, c);
-	ugui_update();
-}
-
-void
-ugui_circle(UG_S16 x0, UG_S16 y0, UG_S16 r, UG_COLOR c)
-{
-	UG_DrawCircle(x0, y0, r, c);
-	UG_FillCircle(x0, y0, r, c);
-	ugui_update();
-}
-
-void
-ugui_clear_pixmap(void)
+lcd_clear_pixmap(void)
 {
 	memset(pixmap, 0x00, LCD_BUFFER_SIZE);
 }
 
 void
-ugui_line(UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c)
+lcd_circle(UG_S16 x0, UG_S16 y0, UG_S16 r, UG_COLOR c)
 {
-	UG_DrawLine(x1, y1, x2, y2, c);
-	ugui_update();
+	UG_DrawCircle(x0, y0, r, c);
+	UG_FillCircle(x0, y0, r, c);
+	lcd_update();
 }
 
 void
-ugui_print_string(UG_S16 x, UG_S16 y, char* str)
+lcd_print_string(UG_S16 x, UG_S16 y, char* str)
 {
 	UG_PutString(x, y, str);
-	ugui_update();
-}
-
-void
-ugui_set_font(const UG_FONT* font)
-{
-	UG_FontSelect(font);
+	lcd_update();
 }

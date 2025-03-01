@@ -28,6 +28,8 @@
 		"nokia5110.h": "c",
 		"sstream": "c",
 		"chrono": "c",
-		"ugui.h": "c"
+		"ugui.h": "c",
+		"ugui_config.h": "c",
+		"ugui_main.h": "c"
 	}
 }
