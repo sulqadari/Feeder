@@ -9,7 +9,7 @@
 				"${workspaceFolder}/hal/CMSIS/Include",
 				"${workspaceFolder}/libs/nokia5110",
 				"${workspaceFolder}/libs/graphics",
-				"${workspaceFolder}/UGUI"
+				"${workspaceFolder}/libs/uGUI"
             ],
             "defines": [
                 "STM32F103xB"
