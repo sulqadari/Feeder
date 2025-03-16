@@ -30,6 +30,7 @@
 		"chrono": "c",
 		"ugui.h": "c",
 		"ugui_config.h": "c",
-		"ugui_main.h": "c"
+		"ugui_main.h": "c",
+		"lcd_main.h": "c"
 	}
 }

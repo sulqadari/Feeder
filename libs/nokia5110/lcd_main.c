@@ -23,10 +23,12 @@ draw_pixel(UG_S16 x, UG_S16 y, UG_COLOR c)
 void
 lcd_init(UG_GUI* gui)
 {
+	n5110_init();
 	UG_Init(gui, draw_pixel, LCD_WIDTH, LCD_HEIGHT);
 	UG_FontSelect(&FONT_5X12);
 	UG_SetBackcolor(C_WHITE);
 	UG_SetForecolor(C_BLACK);
+	n5110_set_cursor(0, 0);
 }
 
 void
@@ -35,8 +37,8 @@ lcd_set_font(const UG_FONT* font)
 	UG_FontSelect(font);
 }
 
-void
-lcd_update(void)
+static void
+update_pixmap(void)
 {
 	NSS_LOW;
 	while (SPI1_IsBusy());
@@ -65,12 +67,12 @@ lcd_circle(UG_S16 x0, UG_S16 y0, UG_S16 r, UG_COLOR c)
 {
 	UG_DrawCircle(x0, y0, r, c);
 	UG_FillCircle(x0, y0, r, c);
-	lcd_update();
+	update_pixmap();
 }
 
 void
 lcd_print_string(UG_S16 x, UG_S16 y, char* str)
 {
 	UG_PutString(x, y, str);
-	lcd_update();
+	update_pixmap();
 }

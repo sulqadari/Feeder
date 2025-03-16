@@ -25,6 +25,7 @@ void
 SPI1_Init(void)
 {
 	rcc_periph_clock_enable(RCC_GPIOA);
+	rcc_periph_clock_enable(RCC_GPIOB);
 	rcc_periph_clock_enable(RCC_AFIO);
 	rcc_periph_clock_enable(RCC_SPI1);
 	
@@ -32,7 +33,13 @@ SPI1_Init(void)
 		GPIOA_BASE,
 		GPIO_MODE_OUTPUT_10_MHZ,
 		GPIO_CNF_OUTPUT_PUSHPULL,
-		SE_PIN | DC_PIN | RST_PIN);
+		SE_PIN | DC_PIN);
+	
+	gpio_set_mode(
+		GPIOB_BASE,
+		GPIO_MODE_OUTPUT_10_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL,
+		RST_PIN);
 
 	gpio_set_mode(
 		GPIOA_BASE,

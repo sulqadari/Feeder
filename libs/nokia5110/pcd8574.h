@@ -21,8 +21,8 @@
 #define DATA_MODE	gpio_set(GPIOA_BASE, DC_PIN)
 #define CMD_MODE	gpio_clear(GPIOA_BASE, DC_PIN)
 
-#define RESET_HIGH	gpio_set(GPIOA_BASE, RST_PIN)
-#define RESET_LOW	gpio_clear(GPIOA_BASE, RST_PIN)
+#define RESET_HIGH	gpio_set(GPIOB_BASE, RST_PIN)
+#define RESET_LOW	gpio_clear(GPIOB_BASE, RST_PIN)
 
 #define FUNC_SET		0x20
 #define FUNC_SET_BASIC	0x00

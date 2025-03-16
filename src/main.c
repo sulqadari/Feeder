@@ -23,10 +23,7 @@ main(void)
 	);
 
 	SPI1_Init();
-	n5110_init();
 	lcd_init(&ugui);
-	n5110_set_cursor(0, 0);
-
 
 	while (1) {
 
@@ -41,9 +38,6 @@ main(void)
 			lcd_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_WHITE);
 			DWT_delay_ms(100);
 		}
-
-		lcd_print_string(17, 14, "Eggplant");
-		DWT_delay_ms(1000);
 	}
 
 	return 0;

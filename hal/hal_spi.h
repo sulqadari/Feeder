@@ -18,7 +18,7 @@ extern "C" {
 
 // PORT A
 
-#define RST_PIN		GPIO1
+#define RST_PIN		GPIO12
 #define DC_PIN		GPIO2
 #define SE_PIN		GPIO3
 
