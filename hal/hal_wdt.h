@@ -1,5 +1,5 @@
-#ifndef DELAY_H_
-#define DELAY_H_
+#ifndef DELAY_HAL_H
+#define DELAY_HAL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,4 +37,4 @@ void DWT_nb_delay_us(Delay_TypeDef *dt, uint32_t delay);
 }
 #endif /* __cplusplus */
 
-#endif /* DELAY_H_ */
+#endif /* DELAY_HAL_H */

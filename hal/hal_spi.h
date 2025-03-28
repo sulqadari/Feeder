@@ -5,8 +5,8 @@
  *     Author: Admin
  */
 
-#ifndef SPI_H_
-#define SPI_H_
+#ifndef SPI_HAL_H
+#define SPI_HAL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,15 +18,12 @@ extern "C" {
 
 // PORT A
 
-#define RST_PIN		GPIO12
 #define DC_PIN		GPIO2
 #define SE_PIN		GPIO3
 
 #define SCK_PIN		GPIO5
 #define MOSI_PIN	GPIO7
-
-
-#define LED_PIN		GPIO13
+#define RST_PIN		GPIO12
 
 void SPI1_Init(void);
 void SPI1_chipEnable(void);
@@ -38,4 +35,4 @@ uint8_t SPI1_IsBusy(void);
 }
 #endif /* __cplusplus */
 
-#endif /* SPI_H_ */
+#endif /* SPI_HAL_H */

@@ -251,3 +251,148 @@ mini_snprintf(char *buf,unsigned maxbuf,const char *format,...) {
 }
 
 /* End miniprintf.c */
+
+#if (0) /* feat I.Kostromin */
+#include <stdint.h>
+
+static void dbgPrintInt(uint32_t val, uint8_t radix, uint8_t padd, uint8_t paddmode) {
+    uint32_t tmp, len;
+    char chr;
+    /* calculate length of the value in radixes */
+    tmp = val;
+    len = 0;
+    while (tmp > 0) {
+        tmp /= radix;
+        len++;
+    }
+    if (val == 0) {
+    	len = 1;
+    }
+    /* add radixes padding */
+    if (len < padd) {
+        padd -= len;
+        while (padd > 0) {
+            debugUartChar(paddmode);
+            padd--;
+        }
+    }
+    tmp = 1;
+    while (len > 1) {
+        tmp *= radix;
+        len--;
+    }
+    while (tmp > 0) {
+        len = val / tmp;
+        val -= len * tmp;
+        chr = len + '0';
+        if (chr > '9') {
+        	chr += 7;
+        }
+        debugUartChar(chr);
+        tmp /= radix;
+    }
+}
+
+static void dbgPrintStr(const char* str) {
+	while (str[0] != 0) {
+		debugUartChar(str[0]);
+		str++;
+	}
+}
+
+static void dbgHexStr(const uint8_t* addr, uint32_t length) {
+    while (length > 0) {
+        dbgPrintInt(addr[0], 16, 2, '0');
+        addr++;
+        length--;
+    }
+}
+
+static void dbgHexWordStr(const uint32_t* addr, uint32_t wlen) {
+    while (wlen > 0) {
+        dbgPrintInt(addr[0], 16, 8, '0');
+        debugUartChar(' ');
+        addr++;
+        wlen--;
+    }
+}
+
+/**
+ * supported formats: %i,%d,%I,%D - integer, %s,%S - string, %x,%X - hex, all other not supported,
+ * modifiers: [cnt] - length of the resulting number, [0cnt] - same, but use '0' istead of ' ', cnt could be only 1 digit long
+ * NOTE: additional: %h,%H - hex arrays, 2 additional arguments - pointer to array and number of bytes within
+ * NOTE: additional: %w,%W - word hex arrays, 2 additional arguments - pointer to array and number of words within
+ */
+void dbgPrint(const char* format, ...) {
+    uint8_t radix, padd, paddmode;
+    va_list factor;
+    va_start(factor, format);
+    
+    while(format[0] != 0)
+    {
+        /* format specifier %[flags][width][.precision][length] */
+    	if (format[0] == '\n') {
+    		debugUartChar('\r');
+    	}
+        if (format[0] != '%') {
+            debugUartChar(format[0]);
+            format++;
+            continue;
+        }
+        format++;
+        paddmode = ' ';
+        if (format[0] == '0') { /* use '0' to pad */
+            paddmode = '0';
+            format++;
+        }
+        padd = 0;
+        if (format[0] > '0' && format[0] <= '9') {
+            padd = format[0] - '0';
+            format++;
+        }
+        radix = 0;
+        switch(format[0]) {
+            case 'x':
+            case 'X':
+                radix = 16;
+                break;
+            case 'i':
+            case 'I':
+            case 'd':
+            case 'D':
+                radix = 10;
+                break;
+            case 's':
+            case 'S':
+                radix = 1;
+                break;
+            case 'h':
+            case 'H':
+                radix = 2;
+                break;
+            case 'w':
+            case 'W':
+                radix = 3;
+                break;
+            default: break;
+        }
+        format++;
+        if (radix > 3) {
+            uint32_t digit = va_arg(factor, uint32_t);
+        	dbgPrintInt(digit, radix, padd, paddmode);
+        } else if (radix == 1) {
+        	const char* str = va_arg(factor, const char*);
+        	dbgPrintStr(str);
+        } else if (radix == 2) {
+            const uint8_t* addr = va_arg(factor, const uint8_t*);
+            uint32_t length = va_arg(factor, uint32_t);
+            dbgHexStr(addr, length);
+        } else if (radix == 3) {
+            const uint32_t* waddr = va_arg(factor, const uint32_t*);
+            uint32_t length = va_arg(factor, uint32_t);
+            dbgHexWordStr(waddr, length);
+        }
+    }
+    va_end(factor);
+}
+#endif /* feat I.Kostromin */
