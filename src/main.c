@@ -6,6 +6,7 @@
 #include "hal_spi.h"
 #include "lcd_main.h"
 #include "hal_exti.h"
+#include "miniprintf.h"
 
 #define LED_PIN		GPIO13
 
@@ -25,6 +26,7 @@ int
 main(void)
 {
 	UG_GUI ugui;
+	uint32_t press_count = 0;
 
 	rcc_set_hse72();
 	DWT_Init();
@@ -32,13 +34,14 @@ main(void)
     LED_Init();
 	SPI1_Init();
 	lcd_init(&ugui);
-    // EXTI_Init();
+    EXTI_Init();
 
 	while (1) {
-#if (0)
+#if (1)
         if (left_btn) {
-            lcd_print_string(LCD_WIDTH / 2, LCD_HEIGHT / 2, "button\npressed");
-			DWT_delay_ms(500);
+			lcd_clear_pixmap();
+			mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button pressed\ncount %d", press_count++);
+            lcd_print_string(0, 0, printf_array);
             left_btn = 0;
         }
 #else

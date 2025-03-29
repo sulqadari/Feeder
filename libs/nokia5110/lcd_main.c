@@ -1,5 +1,6 @@
 #include "lcd_main.h"
 
+
 static uint8_t pixmap[LCD_COLUMNS_TOTAL][LCD_ROWS_TOTAL];
 
 static void
@@ -60,6 +61,7 @@ void
 lcd_clear_pixmap(void)
 {
 	memset(pixmap, 0x00, LCD_BUFFER_SIZE);
+	update_pixmap();
 }
 
 void

@@ -15,6 +15,9 @@ extern "C" {
 #include <stdarg.h>
 #include <string.h>
 
+#define PRINTF_ARRAY_LEN 256
+extern char printf_array[];
+
 int mini_vprintf_cooked(void (*putc)(char),const char *format,va_list args);
 int mini_vprintf_uncooked(void (*putc)(char),const char *format,va_list args);
 

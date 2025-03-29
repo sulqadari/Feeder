@@ -8,6 +8,9 @@
 
 #include "miniprintf.h"
 
+
+char printf_array[PRINTF_ARRAY_LEN];
+
 /*
  * Internal structure for I/O
  */
