@@ -14,16 +14,14 @@ extern "C" {
 
 #include "stm32f1xx.h"
 
-#define SPI_PORT	GPIOA_BASE
+// PORT B
 
-// PORT A
+#define DC_PIN		GPIO5
+#define SE_PIN		GPIO6
+#define RST_PIN		GPIO7
 
-#define DC_PIN		GPIO2
-#define SE_PIN		GPIO3
-
-#define SCK_PIN		GPIO5
-#define MOSI_PIN	GPIO7
-#define RST_PIN		GPIO12
+#define SCK_PIN		GPIO13
+#define MOSI_PIN	GPIO15
 
 void SPI1_Init(void);
 void SPI1_chipEnable(void);

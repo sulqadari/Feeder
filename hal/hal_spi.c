@@ -24,30 +24,23 @@
 void
 SPI1_Init(void)
 {
-	rcc_periph_clock_enable(RCC_GPIOA);
 	rcc_periph_clock_enable(RCC_GPIOB);
 	rcc_periph_clock_enable(RCC_AFIO);
-	rcc_periph_clock_enable(RCC_SPI1);
-	
-	gpio_set_mode(
-		GPIOA_BASE,
-		GPIO_MODE_OUTPUT_10_MHZ,
-		GPIO_CNF_OUTPUT_PUSHPULL,
-		SE_PIN | DC_PIN);
+	rcc_periph_clock_enable(RCC_SPI2);
 	
 	gpio_set_mode(
 		GPIOB_BASE,
 		GPIO_MODE_OUTPUT_10_MHZ,
 		GPIO_CNF_OUTPUT_PUSHPULL,
-		RST_PIN);
+		DC_PIN | SE_PIN | RST_PIN);
 
 	gpio_set_mode(
-		GPIOA_BASE,
+		GPIOB_BASE,
 		GPIO_MODE_OUTPUT_10_MHZ,
 		GPIO_CNF_OUTPUT_ALTFN_PUSHPULL,
 		SCK_PIN | MOSI_PIN);
 	
-	SPI1->CR1 = SPI_CR1_MSTR	// Configuring the SPI as the master
+	SPI2->CR1 = SPI_CR1_MSTR	// Configuring the SPI as the master
 				| SPI_CR1_BR_2	// Choose divisor 72MHz / 32 = 2.25 MHz speed
 				| SPI_CR1_SSM	// Software slave management enabled
 				| SPI_CR1_SSI	// Force HIGH on NSS pin (Has effect only when the SPI_CR1_SSM=1)
@@ -57,24 +50,24 @@ SPI1_Init(void)
 void
 SPI1_chipEnable(void)
 {
-	GPIOA->BRR |= GPIO_BRR_BR4;	// 1: Reset the corresponding ODRx bit
+	GPIOB->BRR |= GPIO_BRR_BR4;	// 1: Reset the corresponding ODRx bit
 }
 
 void
 SPI1_chipDisable(void)
 {
-	GPIOA->BSRR |= GPIO_BSRR_BS4;	// 1: Set the corresponding ODRx bit
+	GPIOB->BSRR |= GPIO_BSRR_BS4;	// 1: Set the corresponding ODRx bit
 }
 
 void
 SPI1_Send(uint8_t data)
 {
-	while ((SPI1->SR & SPI_SR_TXE) == RESET);	// Wait until the transmit buffer becomes empty
-	SPI1->DR = data;
+	while ((SPI2->SR & SPI_SR_TXE) == RESET);	// Wait until the transmit buffer becomes empty
+	SPI2->DR = data;
 }
 
 uint8_t
 SPI1_IsBusy(void)
 {
-	return SPI1->SR & SPI_SR_BSY;
+	return SPI2->SR & SPI_SR_BSY;
 }

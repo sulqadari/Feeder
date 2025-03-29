@@ -15,11 +15,11 @@
 #define LCD_ROWS_TOTAL      6
 #define LCD_BUFFER_SIZE	((LCD_WIDTH * LCD_HEIGHT) / 8)
 
-#define NSS_HIGH	gpio_set(GPIOA_BASE, SE_PIN)
-#define NSS_LOW		gpio_clear(GPIOA_BASE, SE_PIN)
+#define NSS_HIGH	gpio_set(GPIOB_BASE, SE_PIN)
+#define NSS_LOW		gpio_clear(GPIOB_BASE, SE_PIN)
 
-#define DATA_MODE	gpio_set(GPIOA_BASE, DC_PIN)
-#define CMD_MODE	gpio_clear(GPIOA_BASE, DC_PIN)
+#define DATA_MODE	gpio_set(GPIOB_BASE, DC_PIN)
+#define CMD_MODE	gpio_clear(GPIOB_BASE, DC_PIN)
 
 #define RESET_HIGH	gpio_set(GPIOB_BASE, RST_PIN)
 #define RESET_LOW	gpio_clear(GPIOB_BASE, RST_PIN)

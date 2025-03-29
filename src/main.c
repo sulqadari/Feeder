@@ -32,14 +32,28 @@ main(void)
     LED_Init();
 	SPI1_Init();
 	lcd_init(&ugui);
-    EXTI_Init();
+    // EXTI_Init();
 
 	while (1) {
+#if (0)
         if (left_btn) {
             lcd_print_string(LCD_WIDTH / 2, LCD_HEIGHT / 2, "button\npressed");
 			DWT_delay_ms(500);
             left_btn = 0;
         }
+#else
+		gpio_toggle(GPIOC_BASE, LED_PIN);
+				
+		for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
+			lcd_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_BLACK);
+			DWT_delay_ms(50);
+		}
+
+		for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
+			lcd_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_WHITE);
+			DWT_delay_ms(50);
+		}
+#endif
     }
 
 	return 0;
