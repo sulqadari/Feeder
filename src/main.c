@@ -36,7 +36,8 @@ main(void)
 
 	while (1) {
         if (left_btn) {
-            lcd_print_string( LCD_WIDTH / 2, LCD_HEIGHT / 2, "button\npressed");
+            lcd_print_string(LCD_WIDTH / 2, LCD_HEIGHT / 2, "button\npressed");
+			DWT_delay_ms(500);
             left_btn = 0;
         }
     }

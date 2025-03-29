@@ -1,6 +1,6 @@
 #include "hal_exti.h"
 
-uint8_t btnLeft = 0;
+uint8_t left_btn = 0;
 
 void
 EXTI_Init(void)
@@ -27,11 +27,11 @@ void
 EXTI0_IRQHandler(void)
 {
     EXTI->PR = EXTI_PR_PR0;
-    asm("nop");
-    asm("nop");
-    asm("nop");
-    asm("nop");
+    __ASM volatile ("nop");
+    __ASM volatile ("nop");
+    __ASM volatile ("nop");
+    __ASM volatile ("nop");
 
-    btnLeft = 1;
+    left_btn = 1;
     /* TODO: button press handler. */
 }

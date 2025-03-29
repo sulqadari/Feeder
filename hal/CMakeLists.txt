@@ -3,6 +3,7 @@ add_library(${LIB_HAL}
 	hal_gpio.c
 	hal_rcc.c
 	hal_spi.c
+	hal_exti.c
 )
 
 target_include_directories(${LIB_HAL}
