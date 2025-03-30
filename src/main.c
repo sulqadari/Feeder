@@ -26,7 +26,7 @@ int
 main(void)
 {
 	UG_GUI ugui;
-	uint32_t press_count = 0;
+	uint32_t press_count[4] = {0};
 
 	rcc_set_hse72();
 	DWT_Init();
@@ -38,12 +38,33 @@ main(void)
 
 	while (1) {
 #if (1)
-        if (left_btn) {
-			lcd_clear_pixmap();
-			mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button pressed\ncount %d", press_count++);
-            lcd_print_string(0, 0, printf_array);
-            left_btn = 0;
-        }
+		switch (which_one) {
+			case 0: {
+				lcd_clear_pixmap();
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button %d\ncount: %d", which_one, ++press_count[0]);
+				lcd_print_string(0, 0, printf_array);
+				which_one = 0xff;
+			} break;
+			case 1: {
+				lcd_clear_pixmap();
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button %d\ncount: %d", which_one, ++press_count[1]);
+				lcd_print_string(0, 0, printf_array);
+				which_one = 0xff;
+			} break;
+			case 2: {
+				lcd_clear_pixmap();
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button %d\ncount: %d", which_one, ++press_count[2]);
+				lcd_print_string(0, 0, printf_array);
+				which_one = 0xff;
+			} break;
+			case 3: {
+				lcd_clear_pixmap();
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button %d\ncount: %d", which_one, ++press_count[3]);
+				lcd_print_string(0, 0, printf_array);
+				which_one = 0xff;
+			} break;
+			default: /* Just skip this iteration. */
+		}
 #else
 		gpio_toggle(GPIOC_BASE, LED_PIN);
 				

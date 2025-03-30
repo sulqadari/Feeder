@@ -27,6 +27,7 @@ add_compile_definitions(
 
 add_compile_options(
 	-Wall
+	-Wno-format
 	-O0
 	-std=c99
 	-g

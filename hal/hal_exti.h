@@ -4,7 +4,7 @@
 #include "hal_rcc.h"
 #include "hal_gpio.h"
 
-extern uint8_t left_btn;
+extern uint8_t which_one;
 
 void EXTI_Init(void);
 
