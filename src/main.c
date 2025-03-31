@@ -41,25 +41,25 @@ main(void)
 		switch (which_one) {
 			case 0: {
 				lcd_clear_pixmap();
-				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button %d\ncount: %d", which_one, ++press_count[0]);
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'A+'\n%d", ++press_count[0]);
 				lcd_print_string(0, 0, printf_array);
 				which_one = 0xff;
 			} break;
 			case 1: {
 				lcd_clear_pixmap();
-				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button %d\ncount: %d", which_one, ++press_count[1]);
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'A-'\n%d", --press_count[0]);
 				lcd_print_string(0, 0, printf_array);
 				which_one = 0xff;
 			} break;
 			case 2: {
 				lcd_clear_pixmap();
-				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button %d\ncount: %d", which_one, ++press_count[2]);
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'B+'\n%d", ++press_count[1]);
 				lcd_print_string(0, 0, printf_array);
 				which_one = 0xff;
 			} break;
 			case 3: {
 				lcd_clear_pixmap();
-				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "button %d\ncount: %d", which_one, ++press_count[3]);
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'B-'\n%d", --press_count[1]);
 				lcd_print_string(0, 0, printf_array);
 				which_one = 0xff;
 			} break;
