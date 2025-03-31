@@ -16,8 +16,8 @@ EXTI_Init(void)
         GPIO0 | GPIO1 | GPIO2 | GPIO3
     );
 
-    GPIOA->ODR	|= GPIO_ODR_ODR0 | GPIO_ODR_ODR1	// pull-up resistor
-				|  GPIO_ODR_ODR2 | GPIO_ODR_ODR3;
+    // GPIOA->ODR	|= GPIO_ODR_ODR0 | GPIO_ODR_ODR1	// pull-up resistor
+	// 			|  GPIO_ODR_ODR2 | GPIO_ODR_ODR3;
     
 	EXTI->RTSR	|= EXTI_RTSR_RT0 | EXTI_RTSR_RT1	// Rising trigger enabled for PA0 (RM0008, 10.3.3).
 				|  EXTI_RTSR_RT2 | EXTI_RTSR_RT3;
@@ -45,7 +45,8 @@ void
 EXTI0_IRQHandler(void)
 {
     EXTI->PR = EXTI_PR_PR0;	// Reset interrupt request on line "0". see 10.2.4
-    EXTI_IDLE;
+    __ASM volatile ("nop"); __ASM volatile ("nop");
+    __ASM volatile ("nop"); __ASM volatile ("nop");
 
 	which_one = 0;
 }
@@ -54,7 +55,8 @@ void
 EXTI1_IRQHandler(void)
 {
 	EXTI->PR = EXTI_PR_PR1;	// Reset interrupt request on line "1". see 10.2.4
-    EXTI_IDLE;
+    __ASM volatile ("nop"); __ASM volatile ("nop");
+    __ASM volatile ("nop"); __ASM volatile ("nop");
 
 	which_one = 1;
 }
@@ -63,7 +65,8 @@ void
 EXTI2_IRQHandler(void)
 {
 	EXTI->PR = EXTI_PR_PR2;	// Reset interrupt request on line "2". see 10.2.4
-    EXTI_IDLE;
+    __ASM volatile ("nop"); __ASM volatile ("nop");
+    __ASM volatile ("nop"); __ASM volatile ("nop");
 
 	which_one = 2;
 }
@@ -72,7 +75,8 @@ void
 EXTI3_IRQHandler(void)
 {
 	EXTI->PR = EXTI_PR_PR3;	// Reset interrupt request on line "3". see 10.2.4
-    EXTI_IDLE;
+    __ASM volatile ("nop"); __ASM volatile ("nop");
+    __ASM volatile ("nop"); __ASM volatile ("nop");
 
 	which_one = 3;
 }
