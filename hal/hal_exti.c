@@ -12,12 +12,9 @@ EXTI_Init(void)
     gpio_set_mode(
         GPIOA_BASE,
         GPIO_MODE_INPUT,
-        GPIO_CNF_INPUT_PULL_UPDOWN,
+        GPIO_CNF_INPUT_FLOAT,
         GPIO0 | GPIO1 | GPIO2 | GPIO3
     );
-
-    // GPIOA->ODR	|= GPIO_ODR_ODR0 | GPIO_ODR_ODR1	// pull-up resistor
-	// 			|  GPIO_ODR_ODR2 | GPIO_ODR_ODR3;
     
 	EXTI->RTSR	|= EXTI_RTSR_RT0 | EXTI_RTSR_RT1	// Rising trigger enabled for PA0 (RM0008, 10.3.3).
 				|  EXTI_RTSR_RT2 | EXTI_RTSR_RT3;
