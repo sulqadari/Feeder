@@ -37,5 +37,6 @@ RTC_Init(void)
 void
 RTC_IRQHandler(void)
 {
-
+    RTC->CRL &= ~RTC_CRL_SECF;
+    while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
 }
