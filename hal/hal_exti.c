@@ -16,6 +16,7 @@ EXTI_Init(void)
         GPIO0 | GPIO1 | GPIO2 | GPIO3
     );
     
+	// GPIOA->ODR  |= GPIO0 | GPIO1 | GPIO2 | GPIO3;
 	EXTI->RTSR	|= EXTI_RTSR_RT0 | EXTI_RTSR_RT1	// Rising trigger enabled for PA0 (RM0008, 10.3.3).
 				|  EXTI_RTSR_RT2 | EXTI_RTSR_RT3;
 

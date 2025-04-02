@@ -7,9 +7,14 @@
     2. PWR->CR |= PWR_CR_DBP; // enable access to RTC and backup registers (RM0008, 5.3.6);
 */
 
+uint32_t test_counter;
+uint32_t test_prev;
+
 void
 RTC_Init(void)
 {
+	test_counter = 0;
+	test_prev = 0;
     rcc_periph_clock_enable(RCC_PWR);   // Enable Power domain
     rcc_periph_clock_enable(RCC_BKP);   // Backup interface clock enabled
     PWR->CR |= PWR_CR_DBP;              // Access to RTC and Backup registers enabled
@@ -19,8 +24,8 @@ RTC_Init(void)
 
     RCC->BDCR |= RCC_BDCR_RTCSEL_0;     // Set the LSE as the source clock for RTC
 
-    RTC->CRL |= RTC_CRL_CNF;            // Enter the RTC Configuration mode 
     while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
+    RTC->CRL |= RTC_CRL_CNF;            // Enter the RTC Configuration mode 
 
     RTC->CRH |= RTC_CRH_SECIE;          // Second interrupt is enabled.
     while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.

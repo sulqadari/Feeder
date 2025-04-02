@@ -6,9 +6,14 @@
 #include "hal_spi.h"
 #include "lcd_main.h"
 #include "hal_exti.h"
+#include "hal_rtc.h"
+
 #include "miniprintf.h"
 
 #define LED_PIN		GPIO13
+
+extern uint32_t test_counter;
+extern uint32_t test_prev;
 
 static void
 LED_Init(void)
@@ -34,7 +39,9 @@ main(void)
     LED_Init();
 	SPI1_Init();
 	lcd_init(&ugui);
-    EXTI_Init();
+    
+	EXTI_Init();
+	RTC_Init();
 
 	while (1) {
 #if (1)
@@ -52,10 +59,21 @@ main(void)
 				which_one = 0xff;
 			} break;
 			case 2: {
-				lcd_clear_pixmap();
-				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'B+'\n%d", ++press_count[1]);
-				lcd_print_string(0, 0, printf_array);
 				which_one = 0xff;
+				
+				while (1) {
+					if (test_prev < test_counter) {
+						test_prev = test_counter;
+						lcd_clear_pixmap();
+						mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "test counter'\nvalue: %d", test_counter);
+						lcd_print_string(0, 0, printf_array);
+					}
+
+					if (which_one != 0xff) {
+						break;
+					}
+				}
+				
 			} break;
 			case 3: {
 				lcd_clear_pixmap();
