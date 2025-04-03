@@ -15,26 +15,30 @@ RTC_Init(void)
 {
 	test_counter = 0;
 	test_prev = 0;
-    rcc_periph_clock_enable(RCC_PWR);   // Enable Power domain
-    rcc_periph_clock_enable(RCC_BKP);   // Backup interface clock enabled
-    PWR->CR |= PWR_CR_DBP;              // Access to RTC and Backup registers enabled
+    rcc_periph_clock_enable(RCC_PWR);   // Enable access Power domain.
+    rcc_periph_clock_enable(RCC_BKP);   // Enable access Backup interface.
+    PWR->CR |= PWR_CR_DBP;              // Enable access to backup domain.
 
-    RCC->BDCR |= RCC_BDCR_LSEON;        // Enable LSE
-    while (!(RCC->BDCR & RCC_BDCR_LSERDY)) { ; }    // Wait until the LSE clock stabilize
+    RCC->BDCR |= RCC_BDCR_LSEON;        // Enable the LSE clock.
+    while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { ; }    // Wait until the LSE clock stabilize.
 
-    RCC->BDCR |= RCC_BDCR_RTCSEL_0;     // Set the LSE as the source clock for RTC
-
+    RCC->BDCR |= RCC_BDCR_RTCSEL_0;     // Select LSE as the RTC clock source.
+    RCC->BDCR |= RCC_BDCR_RTCEN;        // Enable the RTC clock.
+    
+    while ((RTC->CRL & RTC_CRL_RSF) == 0) { ; }     // Wait until the RTC registers become synchronized.
     while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
-    RTC->CRL |= RTC_CRL_CNF;            // Enter the RTC Configuration mode 
-
-    RTC->CRH |= RTC_CRH_SECIE;          // Second interrupt is enabled.
+    
+    RTC->CRH |= RTC_CRH_SECIE;          // Enable the "second" global interrupt.
     while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
+
+    // RTC->CRL |= RTC_CRL_CNF;            // Enter the RTC Configuration mode 
+    // while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
 
     RTC->PRLL = 0x7FFF;                 // Get the signal period of 1 second
     while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
 
-    RTC->CRL &= ~RTC_CRL_CNF;           // Exit from the RTC Configuration mode
-    while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
+    // RTC->CRL &= ~RTC_CRL_CNF;           // Exit from the RTC Configuration mode
+    // while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
 
     NVIC_EnableIRQ(RTC_IRQn);
 }
