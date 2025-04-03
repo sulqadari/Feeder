@@ -37,7 +37,7 @@ main(void)
 	DWT_Init();
 
     LED_Init();
-	SPI1_Init();
+	SPI2_Init();
 	lcd_init(&ugui);
     
 	EXTI_Init();

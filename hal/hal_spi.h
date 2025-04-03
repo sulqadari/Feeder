@@ -23,11 +23,11 @@ extern "C" {
 #define SCK_PIN		GPIO13
 #define MOSI_PIN	GPIO15
 
-void SPI1_Init(void);
-void SPI1_chipEnable(void);
-void SPI1_chipDisable(void);
-void SPI1_Send(uint8_t data);
-uint8_t SPI1_IsBusy(void);
+void SPI2_Init(void);
+void SPI2_chipEnable(void);
+void SPI2_chipDisable(void);
+void SPI2_Send(uint8_t data);
+uint8_t SPI2_IsBusy(void);
 
 #ifdef __cplusplus
 }

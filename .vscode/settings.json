@@ -32,6 +32,7 @@
 		"ugui_config.h": "c",
 		"ugui_main.h": "c",
 		"lcd_main.h": "c",
-		"hal_exti.h": "c"
+		"hal_exti.h": "c",
+		"cstdlib": "c"
 	}
 }

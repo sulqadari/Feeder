@@ -11,18 +11,9 @@
 
 /**
  * This configuration is intended for one-directional communication with n5110 display.
- * Legend:
- * The following pins should connect to SPI1 interface of the STM32F103 with the dedicated pins on the slave device (n5110)
- * 
- * SE_PIN(GPIO_A2)   ---> SE (chip select)
- * DC_PIN(GPIO_A3)   ---> DATA/COMMAND
- * RST_PIN(GPIO_A4)  ---> RST
- * SCK_PIN(GPIO_A5)  ---> CLK
- * MOSI_PIN(GPIO_A7) ---> DIN
- * 
  */
 void
-SPI1_Init(void)
+SPI2_Init(void)
 {
 	rcc_periph_clock_enable(RCC_GPIOB);
 	rcc_periph_clock_enable(RCC_AFIO);
@@ -48,26 +39,26 @@ SPI1_Init(void)
 }
 
 void
-SPI1_chipEnable(void)
+SPI2_chipEnable(void)
 {
 	GPIOB->BRR |= GPIO_BRR_BR4;	// 1: Reset the corresponding ODRx bit
 }
 
 void
-SPI1_chipDisable(void)
+SPI2_chipDisable(void)
 {
 	GPIOB->BSRR |= GPIO_BSRR_BS4;	// 1: Set the corresponding ODRx bit
 }
 
 void
-SPI1_Send(uint8_t data)
+SPI2_Send(uint8_t data)
 {
 	while ((SPI2->SR & SPI_SR_TXE) == RESET);	// Wait until the transmit buffer becomes empty
 	SPI2->DR = data;
 }
 
 uint8_t
-SPI1_IsBusy(void)
+SPI2_IsBusy(void)
 {
 	return SPI2->SR & SPI_SR_BSY;
 }

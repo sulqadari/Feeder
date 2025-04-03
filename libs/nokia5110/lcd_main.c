@@ -42,16 +42,16 @@ static void
 update_pixmap(void)
 {
 	NSS_LOW;
-	while (SPI1_IsBusy());
+	while (SPI2_IsBusy());
 	DATA_MODE;
 
 	for (uint16_t y = 0; y < LCD_ROWS_TOTAL; ++y) {
 		for (uint16_t x = 0; x < LCD_COLUMNS_TOTAL; ++x) {
-			SPI1_Send(pixmap[x][y]);
+			SPI2_Send(pixmap[x][y]);
 		}
 	}
 
-	while (SPI1_IsBusy());
+	while (SPI2_IsBusy());
 	NSS_HIGH;
 
 	n5110_set_cursor(0, 0);
