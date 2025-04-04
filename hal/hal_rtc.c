@@ -10,22 +10,21 @@ RTC_Init(void)
     RCC_Periph_clock_en(RCC_BKP);   // Enable access Backup interface.
     PWR->CR |= PWR_CR_DBP;              // Enable access to backup domain.
 
-    if (!(RCC->BDCR & RCC_BDCR_LSEON)) { 
-        RCC->BDCR |= RCC_BDCR_LSEON;        // Enable the LSE clock.
-        while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { ; }// Wait until the LSE clock stabilize.
-    
-        RCC->BDCR |= RCC_BDCR_RTCSEL_0;     // Select LSE as the RTC clock source.
-        RCC->BDCR |= RCC_BDCR_RTCEN;        // Enable the RTC clock.
-        
-        while ((RTC->CRL & RTC_CRL_RSF) == 0) { ; }     // Wait until the RTC registers become synchronized.
-        while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
-        
-        RTC->CRH |= RTC_CRH_SECIE;          // Enable the "second" global interrupt.
-        while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
-    
-        RTC->PRLL = 0x7FFF;                 // Get the signal period of 1 second
-        while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
-    }
+
+	RCC->BDCR |= RCC_BDCR_LSEON;        // Enable the LSE clock.
+	while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { ; }// Wait until the LSE clock stabilize.
+
+	RCC->BDCR |= RCC_BDCR_RTCSEL_0;     // Select LSE as the RTC clock source.
+	RCC->BDCR |= RCC_BDCR_RTCEN;        // Enable the RTC clock.
+	
+	while ((RTC->CRL & RTC_CRL_RSF) == 0) { ; }     // Wait until the RTC registers become synchronized.
+	while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
+	
+	RTC->CRH |= RTC_CRH_SECIE;          // Enable the "second" global interrupt.
+	while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
+
+	RTC->PRLL = 0x7FFF;                 // Get the signal period of 1 second
+	while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
 
     NVIC_EnableIRQ(RTC_IRQn);
 }
