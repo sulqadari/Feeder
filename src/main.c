@@ -1,91 +1,102 @@
-#include "FreeRTOS.h"
-#include "task.h"
+#include <stdint.h>
+#include "stm32f1xx.h"
+#include "hal_rcc.h"
+#include "hal_gpio.h"
+#include "hal_wdt.h"
+#include "hal_spi.h"
+#include "lcd_main.h"
+#include "hal_exti.h"
+#include "hal_rtc.h"
 
-#include <libopencm3/cm3/cortex.h>
-#include <libopencm3/stm32/rcc.h>
-#include <libopencm3/stm32/rtc.h>
-#include <libopencm3/stm32/gpio.h>
-#include <libopencm3/cm3/nvic.h>
+#include "miniprintf.h"
 
+#define LED_PIN		GPIO13
 
-
-static volatile uint32_t days = 0, hours = 0, minutes = 0, seconds = 0;
-static TaskHandle_t task_1_Hdlr = 0;
-
-void
-RTC_IRQHandler(void)
-{
-	UBaseType_t intStatus;
-	BaseType_t woken = pdFALSE;
-
-	if (rtc_check_flag(RTC_SEC)) {
-		rtc_clear_flag(RTC_SEC);
-
-		intStatus = taskENTER_CRITICAL_FROM_ISR();
-		if (++seconds > 59) {
-			minutes++;
-			seconds = 0;
-		}
-
-		if (++minutes > 59) {
-			hours++;
-			minutes = 0;
-		}
-
-		if (++hours > 24) {
-			days++;
-			hours = 0;
-		}
-		taskEXIT_CRITICAL_FROM_ISR(intStatus);
-
-		vTaskNotifyGiveFromISR(task_1_Hdlr, &woken);	// Make task1 work again
-		portYIELD_FROM_ISR(woken);
-	}
-}
+extern uint32_t test_counter;
 
 static void
-rtc_setup(void)
+LED_Init(void)
 {
-	rcc_enable_rtc_clock();
-	rtc_interrupt_disable(RTC_SEC);
-	rtc_awake_from_off(RCC_LSE); 
-	rtc_set_prescale_val(0xFFFF);
-	rtc_set_counter_val(0x0);
-
-	nvic_enable_irq(NVIC_RTC_IRQ);
-
-	cm_disable_interrupts();
-	rtc_clear_flag(RTC_SEC);
-	rtc_interrupt_enable(RTC_SEC);
-	cm_enable_interrupts();
-}
-
-static void
-task_1(void* args __attribute__((unused)))
-{
-	rtc_setup();
-
-	for (;;) {
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);	// Block execution until notified
-		gpio_toggle(GPIOC, GPIO13);	// Toggle LED
-	}
+    RCC_Periph_clock_en(RCC_GPIOC);	// Enable clock on LED
+	gpio_set_mode(
+		GPIOC_BASE,
+		GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL,
+		LED_PIN	
+	);
 }
 
 int
 main(void)
 {
-	rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
-	
-	rcc_periph_clock_enable(RCC_GPIOC);
-	gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+	UG_GUI ugui;
+	uint32_t press_count[4] = {0};
 
-	xTaskCreate(task_1, "task_1", 64, NULL, configMAX_PRIORITIES - 1, &task_1_Hdlr);
+	RCC_Init_HSE72();
+	DWT_Init();
 
-	gpio_clear(GPIOC, GPIO13);
+    LED_Init();
+	SPI2_Init();
+	lcd_init(&ugui);
+    
+	EXTI_Init();
+	RTC_Init();
 
-	vTaskStartScheduler();
-	
-	for (volatile uint8_t i = 0; ; ++i) {  }
+	while (1) {
+#if (1)
+		switch (which_one) {
+			case 0: {
+				lcd_clear_pixmap();
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'A+'\n%d", ++press_count[0]);
+				lcd_print_string(0, 0, printf_array);
+				which_one = 0xff;
+			} break;
+			case 1: {
+				lcd_clear_pixmap();
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'A-'\n%d", --press_count[0]);
+				lcd_print_string(0, 0, printf_array);
+				which_one = 0xff;
+			} break;
+			case 2: {
+                uint32_t test_prev = 0;
+				which_one = 0xff;
+				
+				while (1) {
+					if (test_prev < test_counter) {
+						test_prev = test_counter;
+						lcd_clear_pixmap();
+						mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "test counter'\nvalue: %d", test_counter);
+						lcd_print_string(0, 0, printf_array);
+					}
+
+					if (which_one != 0xff) {
+						break;
+					}
+				}
+				
+			} break;
+			case 3: {
+				lcd_clear_pixmap();
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'B-'\n%d", --press_count[1]);
+				lcd_print_string(0, 0, printf_array);
+				which_one = 0xff;
+			} break;
+			default: /* Just skip this iteration. */
+		}
+#else
+		gpio_toggle(GPIOC_BASE, LED_PIN);
+				
+		for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
+			lcd_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_BLACK);
+			DWT_delay_ms(50);
+		}
+
+		for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
+			lcd_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_WHITE);
+			DWT_delay_ms(50);
+		}
+#endif
+    }
 
 	return 0;
 }

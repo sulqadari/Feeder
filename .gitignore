@@ -2,3 +2,5 @@ build/
 *.log
 *.bin
 *.hex
+*.~lock.*
+Nokia-LCD5110-HAL/

@@ -10,37 +10,29 @@ set(OBJCOPY				"arm-none-eabi-objcopy")
 set(OBJDUMP				"arm-none-eabi-objdump")
 set(SIZE				"arm-none-eabi-size")
 
-set(ENTRY_POINT "FeedMexe")
-# The paths to the libopencm3 files
-set(hal_path			${CMAKE_SOURCE_DIR}/libopencm3)
-set(hal_src_stm32		${hal_path}/lib/stm32)
-set(hal_src_stm32_cmn 	${hal_src_stm32}/common)
-set(hal_src_stm32_f1 	${hal_src_stm32}/f1)
-set(hal_src_cm3			${hal_path}/lib/cm3)
+set(ENTRY_POINT		"FeedMe")
+set(LIB_HAL			"_hal")
+set(LIB_LCD1602		"_lcd1602")
+set(LIB_NOKIA5110	"_nokia5110")
+set(LIB_UGUI		"_uGUI")
 
-#The paths to the FreeRTOS
-set(rtos_path		${CMAKE_SOURCE_DIR}/FreeRTOS-Kernel)
-set(rtos_sources	${rtos_path})
-set(rtos_portable	${rtos_sources}/portable/GCC/ARM_CM3)
-set(rtos_meman		${rtos_sources}/portable/MemMang)
+set(cmsis_path			${PROJECT_SOURCE_DIR}/hal/CMSIS)
+set(cmsis_inc_device	${cmsis_path}/Device/ST/STM32F1xx/Include)
+set(cmsis_inc_core		${cmsis_path}/Include)
+set(cmsis_src_templates ${cmsis_path}/Device/ST/STM32F1xx/Source/Templates)
 
 add_compile_definitions(
 	STM32F103xB STM32F1
 )
 
-#-mapcs-frame -msoft-float
-# -fno-hosted -fno-builtin
 add_compile_options(
-	-Wall -O0 -std=gnu17 -g
+	-Wall
+	-Wno-format
+	-O0
+	-std=c99
+	-g
 	-mcpu=cortex-m3
-	# -mthumb
-	# -mtune=cortex-m3 
 	-fdata-sections -ffunction-sections
-	# -specs=nosys.specs
-	# -specs=nano.specs
-	# -mapcs-frame
-	# -msoft-float
-	# -fno-hosted
 )
 
 add_link_options(
@@ -48,8 +40,11 @@ add_link_options(
 	-mthumb
 	"LINKER:--gc-sections"	# used in conjunction with '-fdata-sections -ffunction-sections'
 	"LINKER:-T,${CMAKE_SOURCE_DIR}/src/STM32F103XB_FLASH.ld"
-	"LINKER:-Map=feeder.map"
+	"LINKER:-Map=${ENTRY_POINT}.map"
 )
 
 
 add_subdirectory(src)
+add_subdirectory(hal)
+add_subdirectory(libs/nokia5110)
+add_subdirectory(libs/uGUI)
