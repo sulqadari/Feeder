@@ -6,8 +6,8 @@ uint8_t which_one = 0xff;
 void
 EXTI_Init(void)
 {
-    rcc_periph_clock_enable(RCC_GPIOA);
-    rcc_periph_clock_enable(RCC_AFIO);
+    RCC_Periph_clock_en(RCC_GPIOA);
+    RCC_Periph_clock_en(RCC_AFIO);
 
     gpio_set_mode(
         GPIOA_BASE,

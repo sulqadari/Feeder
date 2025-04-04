@@ -2,7 +2,7 @@
 
 /** See RM0008, clause 7.3 'RCC registers'. */
 int32_t
-rcc_set_hse72(void)
+RCC_Init_HSE72(void)
 {
 	RCC->CR   |= RCC_CR_HSEON;		// Enable 8 MHz oscillator
 	while (1) {						// Loop until HSE clock source is ready.
@@ -39,7 +39,7 @@ rcc_set_hse72(void)
 }
 
 void
-rcc_periph_clock_enable(enum rcc_periph_clken clken)
+RCC_Periph_clock_en(enum rcc_periph_clken clken)
 {
 	_RCC_REG(clken) |= _RCC_BIT(clken);
 }

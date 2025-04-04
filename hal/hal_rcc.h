@@ -76,7 +76,7 @@ enum rcc_periph_clken {
 	RCC_CEC		= _REG_BIT(0x1C, 30),/*V--*/
 };
 
-int32_t rcc_set_hse72(void);
-void rcc_periph_clock_enable(enum rcc_periph_clken clken);
+int32_t RCC_Init_HSE72(void);
+void RCC_Periph_clock_en(enum rcc_periph_clken clken);
 
 #endif /* RCC_HAL_H */

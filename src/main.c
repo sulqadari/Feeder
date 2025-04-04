@@ -13,12 +13,11 @@
 #define LED_PIN		GPIO13
 
 extern uint32_t test_counter;
-extern uint32_t test_prev;
 
 static void
 LED_Init(void)
 {
-    rcc_periph_clock_enable(RCC_GPIOC);	// Enable clock on LED
+    RCC_Periph_clock_en(RCC_GPIOC);	// Enable clock on LED
 	gpio_set_mode(
 		GPIOC_BASE,
 		GPIO_MODE_OUTPUT_2_MHZ,
@@ -33,7 +32,7 @@ main(void)
 	UG_GUI ugui;
 	uint32_t press_count[4] = {0};
 
-	rcc_set_hse72();
+	RCC_Init_HSE72();
 	DWT_Init();
 
     LED_Init();
@@ -59,6 +58,7 @@ main(void)
 				which_one = 0xff;
 			} break;
 			case 2: {
+                uint32_t test_prev = 0;
 				which_one = 0xff;
 				
 				while (1) {

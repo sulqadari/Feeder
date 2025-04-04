@@ -15,9 +15,9 @@
 void
 SPI2_Init(void)
 {
-	rcc_periph_clock_enable(RCC_GPIOB);
-	rcc_periph_clock_enable(RCC_AFIO);
-	rcc_periph_clock_enable(RCC_SPI2);
+	RCC_Periph_clock_en(RCC_GPIOB);
+	RCC_Periph_clock_en(RCC_AFIO);
+	RCC_Periph_clock_en(RCC_SPI2);
 	
 	gpio_set_mode(
 		GPIOB_BASE,
