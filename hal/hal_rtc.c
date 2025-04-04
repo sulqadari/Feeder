@@ -10,7 +10,7 @@ RTC_Init(void)
     RCC_Periph_clock_en(RCC_BKP);   // Enable access Backup interface.
     PWR->CR |= PWR_CR_DBP;              // Enable access to backup domain.
 
-    if (!(RCC->BDCR & RCC_BDCR_LSERDY)) { 
+    if (!(RCC->BDCR & RCC_BDCR_LSEON)) { 
         RCC->BDCR |= RCC_BDCR_LSEON;        // Enable the LSE clock.
         while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0) { ; }// Wait until the LSE clock stabilize.
     
