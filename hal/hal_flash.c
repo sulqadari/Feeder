@@ -40,6 +40,7 @@ FLASH_pageErase(uint32_t pageAddr)
     FLASH->CR |= FLASH_CR_STRT;
 
     while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
+    FLASH->SR &= FLASH_SR_EOP;
 }
 
 static Flash_SW
@@ -67,13 +68,20 @@ FLASH_write(uint32_t addr, uint16_t data)
     while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
     FLASH->CR |= FLASH_CR_PG;
 
-    FLASH_readHalf(aligned, &temp);
-    if (temp != 0xFFFF) {
-        FLASH_pageErase(addr);
+    while (1) {
+        *(uint16_t*)aligned = data;
+
+        if (FLASH->SR & FLASH_SR_PGERR) {
+            FLASH_pageErase(addr);
+            FLASH->SR &= FLASH_SR_PGERR;
+            continue;
+        }
+
+        while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
+        break;
     }
 
-    *(uint16_t*)aligned = data;
-    while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
 
+    FLASH->SR &= FLASH_SR_EOP;
     FLASH_lock();
 }
