@@ -31,7 +31,7 @@ RCC_Init_HSE72(void)
 			break;
 	}
 
-	RCC->CR &= ~RCC_CR_HSION;			// Turn HSI oscillator off
+	// RCC->CR &= ~RCC_CR_HSION;			// Turn HSI oscillator off
 	
 	SystemCoreClockUpdate();
 	
