@@ -5,6 +5,7 @@ add_library(${LIB_HAL}
 	hal_spi.c
 	hal_exti.c
 	hal_rtc.c
+    hal_flash.c
 )
 
 target_include_directories(${LIB_HAL}
