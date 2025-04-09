@@ -34,13 +34,18 @@ FLASH_pageErase(uint32_t pageAddr)
 {
     uint32_t aligned = (pageAddr + 3) & 0xFFFFFFC;
     while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
+    if (FLASH->SR & FLASH_SR_EOP) {
+        FLASH->SR &= FLASH_SR_EOP;
+    }
 
     FLASH->CR |= FLASH_CR_PER;
     FLASH->AR |= aligned;   // select a page to erase
     FLASH->CR |= FLASH_CR_STRT;
 
-    while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
+    while (FLASH->SR & FLASH_SR_EOP) { ; }  // Wait until current (if any) memory operation being commited.
+    
     FLASH->SR &= FLASH_SR_EOP;
+    FLASH->CR &= ~FLASH_CR_PER;
 }
 
 static Flash_SW
@@ -58,6 +63,26 @@ FLASH_lock(void)
     return fsw_OK;
 }
 
+static Flash_SW
+tryToWrite(uint32_t addr, uint32_t aligned, uint16_t data)
+{
+    FLASH->CR |= FLASH_CR_PG;
+    while (1) {
+        *(uint16_t*)aligned = data;         // Assign a half-word
+
+        if (FLASH->SR & FLASH_SR_PGERR) {   // Does assignment led to error because of non-FF state of the memory?
+            FLASH_pageErase(addr);          // clear the page
+            FLASH->SR &= FLASH_SR_PGERR;    // Reset the PGERR flag
+            continue;                       // Try to write again
+        }
+
+        while (!(FLASH->SR & FLASH_SR_EOP)) { ; }  // Wait until current (if any) memory operation being commited.
+        FLASH->SR &= FLASH_SR_EOP;
+        FLASH->CR |= FLASH_CR_PG;
+        break;
+    }
+}
+
 Flash_SW
 FLASH_write(uint32_t addr, uint16_t data)
 {
@@ -65,23 +90,12 @@ FLASH_write(uint32_t addr, uint16_t data)
     uint16_t temp = 0;
     FLASH_unlock();
 
-    while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
-    FLASH->CR |= FLASH_CR_PG;
-
-    while (1) {
-        *(uint16_t*)aligned = data;
-
-        if (FLASH->SR & FLASH_SR_PGERR) {
-            FLASH_pageErase(addr);
-            FLASH->SR &= FLASH_SR_PGERR;
-            continue;
-        }
-
-        while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
-        break;
+    while (FLASH->SR & FLASH_SR_BSY) { ; }
+    if (FLASH->SR & FLASH_SR_EOP) {
+        FLASH->SR &= FLASH_SR_EOP;
     }
 
+    tryToWrite(addr, aligned, data);
 
-    FLASH->SR &= FLASH_SR_EOP;
     FLASH_lock();
 }
