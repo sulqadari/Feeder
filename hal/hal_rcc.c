@@ -19,7 +19,8 @@ RCC_Init_HSE72(void)
 			break;
 	}
 
-	FLASH->ACR |= FLASH_ACR_LATENCY_2;	// RM0008, clause 3.3.3 'FLASH_ACR'
+	FLASH->ACR |= FLASH_ACR_LATENCY_1;	// RM0008, clause 3.3.3 'FLASH_ACR'
+
 	RCC->CFGR  |= RCC_CFGR_HPRE_DIV1;	// AHB prescaller equals 1 (72 MHz)
 	RCC->CFGR  |= RCC_CFGR_PPRE1_DIV2;	// APB1 prescaller equals 2 (36 MHz)
 	RCC->CFGR  |= RCC_CFGR_PPRE2_DIV1;	// APB2 prescaller equals 1 (72 MHz)
@@ -31,7 +32,7 @@ RCC_Init_HSE72(void)
 			break;
 	}
 
-	RCC->CR &= ~RCC_CR_HSION;			// Turn HSI oscillator off
+	// RCC->CR &= ~RCC_CR_HSION;			// Turn HSI oscillator off
 	
 	SystemCoreClockUpdate();
 	

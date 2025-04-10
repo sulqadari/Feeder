@@ -7,6 +7,7 @@
 #include "lcd_main.h"
 #include "hal_exti.h"
 #include "hal_rtc.h"
+#include "flashman.h"
 
 #include "miniprintf.h"
 
@@ -42,8 +43,8 @@ main(void)
 	EXTI_Init();
 	RTC_Init();
 
+    mmInit();
 	while (1) {
-#if (1)
 		switch (which_one) {
 			case 0: {
 				lcd_clear_pixmap();
@@ -83,19 +84,6 @@ main(void)
 			} break;
 			default: /* Just skip this iteration. */
 		}
-#else
-		gpio_toggle(GPIOC_BASE, LED_PIN);
-				
-		for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
-			lcd_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_BLACK);
-			DWT_delay_ms(50);
-		}
-
-		for (uint16_t r = 0; r < LCD_WIDTH / 2; ++r) {
-			lcd_circle( LCD_WIDTH / 2, LCD_HEIGHT / 2, r, C_WHITE);
-			DWT_delay_ms(50);
-		}
-#endif
     }
 
 	return 0;

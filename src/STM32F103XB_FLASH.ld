@@ -153,7 +153,12 @@ SECTIONS
 		. = ALIGN(8);
 	} >RAM
 
-  
+    .endof :
+    {   
+        /* Used by the startup to calculate the falsh start address dedicated
+         * for an application. */
+        _flashStartAddress = .;
+    } > FLASH
 
 	/* Remove information from the standard libraries */
 	/DISCARD/ :
