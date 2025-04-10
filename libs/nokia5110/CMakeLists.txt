@@ -7,7 +7,6 @@ target_include_directories(${LIB_NOKIA5110}
 	PUBLIC ${cmsis_inc_device}
 	PUBLIC ${cmsis_inc_core}
 	PUBLIC ${PROJECT_SOURCE_DIR}/hal
-	PUBLIC ${PROJECT_SOURCE_DIR}/libs/graphics
 	PUBLIC ${PROJECT_SOURCE_DIR}/libs/uGUI
 )
 

@@ -34,6 +34,7 @@
         "lcd_main.h": "c",
         "hal_exti.h": "c",
         "cstdlib": "c",
-        "hal_rcc.h": "c"
+        "hal_rcc.h": "c",
+        "hal_flash.h": "c"
     }
 }
