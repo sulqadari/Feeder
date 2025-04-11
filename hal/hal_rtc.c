@@ -1,11 +1,10 @@
 #include "hal_rtc.h"
 
-uint32_t test_counter;
+datetime_t dateTimeCounter;
 
 void
 RTC_Init(void)
 {
-	test_counter = 0;
     RCC_Periph_clock_en(RCC_PWR);   // Enable access Power domain.
     RCC_Periph_clock_en(RCC_BKP);   // Enable access Backup interface.
     PWR->CR |= PWR_CR_DBP;          // Enable access to backup domain.
@@ -31,14 +30,18 @@ RTC_Init(void)
 
 
 void
-RTC_SetTime(void)
+RTC_SetTime(datetime_t update)
 {
 	while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
 
-    RTC->CRL & RTC_CRL_CNF;                         // Getting into the configuration mode.
-    
-    // RTC->CNTL = (uint16_t)(((uint16_t)upd->min << 8) | (upd->sec & 0xFF));
-    // RTC->CNTH = (uint16_t)(((uint16_t)upd->min << 8) | (upd->sec & 0xFF));
+    RTC->CRL &= RTC_CRL_CNF;                         // Getting into the configuration mode.
+    while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
+	
+    RTC->CNTL = (uint16_t)update;
+    while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
+
+	RTC->CNTH = (uint16_t)(update >> 16);
+	while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
 
     RTC->CRL &= ~RTC_CRL_CNF;                       // Leaving configuration mode.
     while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
@@ -49,6 +52,6 @@ RTC_IRQHandler(void)
 {
     RTC->CRL &= ~RTC_CRL_SECF;
     while ((RTC->CRL & RTC_CRL_RTOFF) == 0) { ; }   // Wait until the last write operation is done.
-	// time.min_sec = RTC->CNTL;
-    // time.day_hour = RTC->CNTH;
+	dateTimeCounter = (uint32_t)RTC->CNTL & 0xFFFF;
+    dateTimeCounter |= (uint32_t)RTC->CNTH << 16;
 }

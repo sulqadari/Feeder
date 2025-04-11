@@ -13,15 +13,15 @@
 
 // Разбивает datetime на дату и время, любой из date,time может быть NULL;
 void cal_datetime_break(datetime_t datetime, uint32_t *date, uint32_t *time);
+
 // Разбивает время на часы, минуты, секунды
-void cal_time_break(uint32_t day_seconds, uint8_t *hour, uint8_t *min,
-		uint8_t *sec);
-// Разбивает время на оставшиеся от суток часы, минуты, секунды
-void cal_time_break_remain(uint32_t day_seconds, uint8_t *hour, uint8_t *min,
-		uint8_t *sec);
+void cal_time_break(uint32_t day_seconds, uint8_t *hour, uint8_t *min, uint8_t *sec);
+
 // Разбивает дату на год, месяц, день
-void cal_date_break(uint32_t epoch_day, uint16_t *year, uint8_t *month,
-		uint8_t *day);
+void cal_date_break(uint32_t epoch_day, uint16_t *year, uint8_t *month, uint8_t *day);
+
+// Разбивает время на оставшиеся от суток часы, минуты, секунды
+void cal_time_break_remain(uint32_t day_seconds, uint8_t *hour, uint8_t *min, uint8_t *sec);
 
 // Объединяет дату и время в datetime
 datetime_t cal_datetime_combine(uint32_t date, uint32_t time);
@@ -34,5 +34,9 @@ bool is_leap_year(uint16_t year);
 bool is_day_of_the_year(uint16_t year, uint8_t month, uint8_t day);
 bool is_valid_day_time(uint32_t hh, uint32_t mm, uint32_t ss);
 int check_date(uint16_t year, uint8_t month, uint8_t day);
+
+void cal_printDate(void);
+void cal_setDate(uint16_t year, uint8_t month, uint8_t day,
+				uint8_t hour, uint8_t min, uint8_t sec);
 
 #endif /* TSM_JC_CALENDAR_H_ */

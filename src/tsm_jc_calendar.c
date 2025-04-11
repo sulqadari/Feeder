@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "tsm_jc_calendar.h"
+#include "lcd_main.h"
+#include "miniprintf.h"
 
 bool is_leap_year(uint16_t year)
 {
@@ -87,10 +89,8 @@ void cal_time_break(uint32_t day_seconds, uint8_t *hour, uint8_t *min,
 	*hour = (day_hours % 24);
 }
 
-void cal_time_break_remain(uint32_t day_seconds, uint8_t *hour, uint8_t *min,
-		uint8_t *sec)
+void cal_time_break_remain(uint32_t day_seconds, uint8_t *hour, uint8_t *min, uint8_t *sec)
 {
-
 	uint32_t seconds_reamain = SECS_PER_DAY - day_seconds % SECS_PER_DAY;
 	cal_time_break(seconds_reamain, hour, min, sec);
 }
@@ -101,8 +101,7 @@ uint32_t cal_time_combine(uint8_t hour, uint8_t min, uint8_t sec)
 	return day_second;
 }
 
-void cal_date_break(uint32_t unix_epoch_day, uint16_t *year, uint8_t *month,
-		uint8_t *day)
+void cal_date_break(uint32_t unix_epoch_day, uint16_t *year, uint8_t *month, uint8_t *day)
 {
 	static const unsigned char days_in_month_norm[] =
 	{ 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -192,4 +191,34 @@ uint32_t cal_date_combine(uint16_t year, uint8_t month, uint8_t day)
 	int leap = (int) is_leap_year(year);
 	epoch_day += (days[leap][month] + day) - 1;
 	return epoch_day;
+}
+
+void
+cal_printDate(void)
+{
+	uint32_t date, time;
+	uint16_t year;
+	uint8_t month, day, hour, min, sec;
+
+	cal_datetime_break(dateTimeCounter, &date, &time);
+	cal_date_break(date, &year, &month, &day);
+	cal_time_break(time, &hour, &min, &sec);
+
+	lcd_clear_pixmap();
+	mini_snprintf(printf_array, PRINTF_ARRAY_LEN,
+		"date\n%02d.%02d.%d\n%02d.%02d.%02d",
+		day, month, year, hour, min, sec);
+	
+	lcd_print_string(0, 0, printf_array);
+}
+
+void
+cal_setDate(uint16_t year, uint8_t month, uint8_t day,
+			uint8_t hour, uint8_t min, uint8_t sec)
+{
+	uint32_t date = cal_date_combine(year, month, day);
+	uint32_t time = cal_time_combine(hour, min, sec);
+	datetime_t update = cal_datetime_combine(date, time);
+
+	RTC_SetTime(update);
 }

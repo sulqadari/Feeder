@@ -45,7 +45,6 @@ defined in linker script */
 /* end address for the .bss section. defined in linker script */
 .word _ebss
 
-/*.word _flashStartAddress*/
 
 .equ  BootRAM, 0xF108F85F
 /**

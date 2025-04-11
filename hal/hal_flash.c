@@ -45,8 +45,6 @@ lockFlash(void)
 Flash_SW
 FLASH_massErase(uint32_t address)
 {
-    uint32_t aligned = (address + 3) & 0xFFFFFFC;
-
     unlockFlash();
 
     while (FLASH->SR & FLASH_SR_BSY) { ; }  // Wait until current (if any) memory operation being commited.
@@ -55,7 +53,6 @@ FLASH_massErase(uint32_t address)
     }
 
     FLASH->CR |= FLASH_CR_MER;  // Mass erase chosen
-    FLASH->AR |= aligned;       // select a page to erase
     FLASH->CR |= FLASH_CR_STRT; // Trigger the start of erase operation
 
     while (FLASH->SR & FLASH_SR_EOP) { ; }  // Wait until current (if any) memory operation being commited.

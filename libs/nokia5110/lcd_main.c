@@ -26,7 +26,7 @@ lcd_init(UG_GUI* gui)
 {
 	n5110_init();
 	UG_Init(gui, draw_pixel, LCD_WIDTH, LCD_HEIGHT);
-	UG_FontSelect(&FONT_6X8);
+	UG_FontSelect(&FONT_5X8);
 	UG_SetBackcolor(C_WHITE);
 	UG_SetForecolor(C_BLACK);
 	n5110_set_cursor(0, 0);

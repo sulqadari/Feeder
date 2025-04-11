@@ -6,14 +6,12 @@
 #include "hal_spi.h"
 #include "lcd_main.h"
 #include "hal_exti.h"
-#include "hal_rtc.h"
+#include "tsm_jc_calendar.h"
 #include "flashmngr.h"
 
 #include "miniprintf.h"
 
-#define LED_PIN		GPIO13
-
-extern uint32_t test_counter;
+#define LED_PIN GPIO13
 
 static void
 LED_Init(void)
@@ -56,6 +54,7 @@ main(void)
 				lcd_clear_pixmap();
 				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'A-'\n%d", --press_count[0]);
 				lcd_print_string(0, 0, printf_array);
+				cal_setDate(2025, 04, 12, 00, 21, 00);
 				which_one = 0xff;
 			} break;
 			case 2: {
@@ -63,11 +62,9 @@ main(void)
 				which_one = 0xff;
 				
 				while (1) {
-					if (test_prev < test_counter) {
-						test_prev = test_counter;
-						lcd_clear_pixmap();
-						mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "test counter'\nvalue: %d", test_counter);
-						lcd_print_string(0, 0, printf_array);
+					if (test_prev < dateTimeCounter) {
+						test_prev = dateTimeCounter;
+						cal_printDate();
 					}
 
 					if (which_one != 0xff) {
@@ -78,7 +75,12 @@ main(void)
 			} break;
 			case 3: {
 				lcd_clear_pixmap();
-				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'B-'\n%d", --press_count[1]);
+				mini_snprintf(printf_array, PRINTF_ARRAY_LEN,
+					"str: %08x\n"
+					"end: %08x\n"
+					"avl: %d\n",
+					(uint32_t)flashBase, flashBound,  flashBound - (uint32_t)flashBase);
+					
 				lcd_print_string(0, 0, printf_array);
 				which_one = 0xff;
 			} break;

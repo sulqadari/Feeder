@@ -1,16 +1,16 @@
 #include "flashmngr.h"
 
-extern uint32_t* _flashStartAddress;
-static uint32_t* flashBase;
-static uint32_t flashTotal;
+uint32_t* flashBase;
+uint32_t flashTotal;
 static const uint32_t flashPagesCount = 64;
 static const uint32_t flashPageSize = 1024;
-static const uint32_t flashBound = (0x08000000 + (flashPagesCount * flashPageSize));
+const uint32_t flashBound = (0x08000000 + (flashPagesCount * flashPageSize));
 
 void
 mmInit(void)
 {
-    flashBase = (uint32_t*)(*_flashStartAddress & 0x3FFF);  // align with page size
+	uint32_t aligned = (uint32_t)&_flashStartAddress;
+    flashBase = (uint32_t*)((aligned + 0x3FF) & 0xFFFFFC00);
     flashTotal = flashBound - (uint32_t)flashBase;
 }
 
