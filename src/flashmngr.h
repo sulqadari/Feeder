@@ -5,12 +5,12 @@
 #include "hal_flash.h"
 #include "string.h"
 
-#define MM_IS_STALE 0xDEAD
-#define MM_IS_FREE  0xFFFF
+#define MM_STALED 0xDEAD
+#define MM_FREE  0xFFFF
 
 typedef struct {
     uint16_t size;
-    uint16_t stale;
+    uint16_t state;
 } mmHeader;
 
 void mmInit(void);

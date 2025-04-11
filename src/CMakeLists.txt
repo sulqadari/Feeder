@@ -2,7 +2,7 @@ add_executable(${ENTRY_POINT}.elf
 	main.c
 	startup_stm32f103xb.s
 	${cmsis_src_templates}/system_stm32f1xx.c
-    flashman.c
+    flashmngr.c
 )
 
 target_include_directories(${ENTRY_POINT}.elf

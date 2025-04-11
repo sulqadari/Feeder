@@ -54,8 +54,8 @@ FLASH_massErase(uint32_t address)
         FLASH->SR &= FLASH_SR_EOP;
     }
 
-    FLASH->AR |= aligned;       // select a page to erase
     FLASH->CR |= FLASH_CR_MER;  // Mass erase chosen
+    FLASH->AR |= aligned;       // select a page to erase
     FLASH->CR |= FLASH_CR_STRT; // Trigger the start of erase operation
 
     while (FLASH->SR & FLASH_SR_EOP) { ; }  // Wait until current (if any) memory operation being commited.
@@ -69,7 +69,8 @@ FLASH_massErase(uint32_t address)
 Flash_SW
 FLASH_erasePage(uint32_t address)
 {
-    uint32_t aligned = (address + 3) & 0xFFFFFFC;
+    // Align with 1024 page size
+    uint32_t aligned = (address + 0x3FF) & 0xFFFFFC00;
 
     unlockFlash();
 
@@ -100,11 +101,11 @@ FLASH_write(uint32_t address, uint16_t data)
     while (FLASH->SR & FLASH_SR_BSY) { ; }
 
     if (FLASH->SR & FLASH_SR_EOP) {
-        FLASH->SR &= FLASH_SR_EOP;
+        FLASH->SR &= FLASH_SR_EOP;      // Reset the 'End Of Programming' bit if it's asserted
     }
 
     FLASH->CR |= FLASH_CR_PG;           // Set the 'Programming' flag
-    *(uint16_t*)aligned = data;         // Assign a half-word
+    *(uint16_t*)aligned = data;         // Assign a half-word to the alligned memory cell
 
     if (FLASH->SR & FLASH_SR_PGERR) {   // Does assignment led to error because of non-FF state of the memory?
         FLASH->SR &= FLASH_SR_PGERR;    // Reset the PGERR flag

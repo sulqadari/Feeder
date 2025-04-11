@@ -7,7 +7,7 @@
 #include "lcd_main.h"
 #include "hal_exti.h"
 #include "hal_rtc.h"
-#include "flashman.h"
+#include "flashmngr.h"
 
 #include "miniprintf.h"
 
