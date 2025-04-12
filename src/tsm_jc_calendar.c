@@ -196,9 +196,9 @@ uint32_t cal_date_combine(uint16_t year, uint8_t month, uint8_t day)
 void
 cal_printDate(void)
 {
-	uint32_t date, time;
-	uint16_t year;
-	uint8_t month, day, hour, min, sec;
+	uint32_t date = 0, time = 0;
+	uint16_t year = 0;
+	uint8_t month = 0, day = 0, hour = 0, min = 0, sec = 0;
 
 	cal_datetime_break(dateTimeCounter, &date, &time);
 	cal_date_break(date, &year, &month, &day);
@@ -206,7 +206,7 @@ cal_printDate(void)
 
 	lcd_clear_pixmap();
 	mini_snprintf(printf_array, PRINTF_ARRAY_LEN,
-		"date\n%02d.%02d.%d\n%02d.%02d.%02d",
+		"date\n%02d.%02d.%d\n%02d:%02d:%02d",
 		day, month, year, hour, min, sec);
 	
 	lcd_print_string(0, 0, printf_array);

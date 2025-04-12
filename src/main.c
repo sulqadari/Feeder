@@ -48,13 +48,13 @@ main(void)
 				lcd_clear_pixmap();
 				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'A+'\n%d", ++press_count[0]);
 				lcd_print_string(0, 0, printf_array);
+				cal_setDate(2025, 04, 12, 10, 20, 00);
 				which_one = 0xff;
 			} break;
 			case 1: {
 				lcd_clear_pixmap();
 				mini_snprintf(printf_array, PRINTF_ARRAY_LEN, "param 'A-'\n%d", --press_count[0]);
 				lcd_print_string(0, 0, printf_array);
-				cal_setDate(2025, 04, 12, 00, 21, 00);
 				which_one = 0xff;
 			} break;
 			case 2: {

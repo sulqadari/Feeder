@@ -2539,7 +2539,7 @@ UG_U8 UG_ButtonGetAlignment( UG_WINDOW* wnd, UG_U8 id )
 void _UG_ButtonUpdate(UG_WINDOW* wnd, UG_OBJECT* obj)
 {
    UG_BUTTON* btn;
-   UG_AREA a;
+   UG_AREA a = {0};
    UG_TEXT txt;
    UG_U8 d;
 
@@ -3109,7 +3109,7 @@ UG_U8 UG_CheckboxGetAlignment( UG_WINDOW* wnd, UG_U8 id )
 void _UG_CheckboxUpdate(UG_WINDOW* wnd, UG_OBJECT* obj)
 {
    UG_CHECKBOX* chb;
-   UG_AREA a;
+   UG_AREA a = {0};
    UG_TEXT txt;
    UG_U8 d;
    UG_U8 d2;
@@ -3547,7 +3547,7 @@ UG_U8 UG_TextboxGetAlignment( UG_WINDOW* wnd, UG_U8 id )
 void _UG_TextboxUpdate(UG_WINDOW* wnd, UG_OBJECT* obj)
 {
    UG_TEXTBOX* txb;
-   UG_AREA a;
+   UG_AREA a = {0};
    UG_TEXT txt;
 
    /* Get object-specific data */
@@ -3697,7 +3697,7 @@ UG_RESULT UG_ImageSetBMP( UG_WINDOW* wnd, UG_U8 id, const UG_BMP* bmp )
 void _UG_ImageUpdate(UG_WINDOW* wnd, UG_OBJECT* obj)
 {
    UG_IMAGE* img;
-   UG_AREA a;
+   UG_AREA a = {0};
 
    /* Get object-specific data */
    img = (UG_IMAGE*)(obj->data);

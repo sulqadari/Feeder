@@ -29,7 +29,7 @@ add_compile_options(
 	-Wall
 	-Wno-format
 	-O0
-	-std=c99
+	-std=c17
 	-g
 	-mcpu=cortex-m3
 	-fdata-sections -ffunction-sections
